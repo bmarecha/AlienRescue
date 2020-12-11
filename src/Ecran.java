@@ -12,7 +12,7 @@ public class Ecran extends JFrame{
 		envi = e;
 		selection = new AffichageSelect(envi);
 		this.setContentPane(selection);
-		this.setSize(600, 800);
+		this.setSize(600, 900);
 		envi.setScreen(this);
 	}
 	

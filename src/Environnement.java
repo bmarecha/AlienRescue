@@ -22,6 +22,7 @@ public class Environnement implements Serializable{
 		screen = e;
 	}
 	
+	//format des fichiers niveaux : NiveauX.niv avec X = son numéro, exemple : Niveau4.niv
 	public void chargerNiveau() {
 		File niveau = new File("Niveau"+cursorNiv+".niv");
 		System.out.println("Chargement du niveau");
