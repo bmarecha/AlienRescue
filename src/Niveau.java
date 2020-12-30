@@ -4,11 +4,15 @@ public class Niveau implements Serializable {
 	private static final long serialVersionUID = 6756182802449785285L;
 	public final int num;
 	public transient Environnement envi;
+	//public final Plateau startPlateau;
+	//public transient Plateau currentPlat;
 	
 	// n'hésite pas à rajouter des choses au constructeur
 	public Niveau(int i) {
 		num = i;
+		//startPlateau = new Plateau(); currentPlateau = startPlateau.clone();
 	}
+	
 	
 	public void setEnvironnement(Environnement e) {
 		envi = e;

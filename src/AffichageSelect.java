@@ -12,6 +12,9 @@ import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
+import javax.swing.border.BevelBorder;
+import javax.swing.border.Border;
+import javax.swing.border.LineBorder;
 
 public class AffichageSelect extends JPanel {
 	private static final long serialVersionUID = 1L;
@@ -22,7 +25,7 @@ public class AffichageSelect extends JPanel {
 	
 	public AffichageSelect (Environnement e) {
 		modele = e;
-		this.setLayout(new GridLayout(6, 1));
+		this.setLayout(null);//new GridLayout(6, 1));
 		File f = new File("images/Planets.jpg");
 		if (f.exists()) {
 			try {
@@ -37,11 +40,14 @@ public class AffichageSelect extends JPanel {
 		}
 		for (int i = 1; i < 6; i++)
 		{
+			int x =  240;
+			int y =  i * (900 / 6) - 130;
 			Bouton niv = new Bouton(i);
 			niv.setText(String.valueOf(i));
 			niv.setOpaque(false);
 			niv.setContentAreaFilled(false);
-			niv.setFont(new Font("Arial", Font.BOLD, 40));
+			niv.setFont(new Font("Arial", Font.BOLD, 60));
+			niv.setBounds(x, y, 100, 100);
 			if ( i > e.maxNiv) {
 				niv.setEnabled(false);
 				niv.setBorderPainted(false);
@@ -50,7 +56,7 @@ public class AffichageSelect extends JPanel {
 				niv.setEnabled(false);
 			}
 			if ( i <= e.maxNiv)
-				niv.setBorder(BorderFactory.createLineBorder((Color.green)));
+				niv.setBorder(new LineBorder(Color.green, 3, true));;
 			niv.addActionListener((event) -> changeNiv(niv.num));
 			niveaux.add(niv);
 			this.add(niv);
@@ -60,7 +66,9 @@ public class AffichageSelect extends JPanel {
 		play.setVerticalTextPosition(JButton.CENTER);
 		play.setOpaque(false);
 		play.setContentAreaFilled(false);
-		play.setFont(new Font("Arial", Font.BOLD, 20));
+		play.setFont(new Font("Arial", Font.BOLD, 40));
+		play.setBounds(80, 800, 480, 50);
+		play.setBorderPainted(false);
 		Image g = null;
 		if (g != null)
 			play.setIcon(new ImageIcon(g));
