@@ -15,7 +15,8 @@ public class Ecran extends JFrame{
 		this.setSize(600, 900);
 		envi.setScreen(this);
 	}
-	
+
+
 	// Retour à l'écran de selection, plein de choses doivent changer
 	public void select() {
 		selection.actualiser();
