@@ -67,7 +67,7 @@ public class AffichageSelect extends JPanel {
 		play.setOpaque(false);
 		play.setContentAreaFilled(false);
 		play.setFont(new Font("Arial", Font.BOLD, 40));
-		play.setBounds(80, 800, 480, 50);
+		play.setBounds(80, 300, 480, 50);
 		play.setBorderPainted(false);
 		Image g = null;
 		if (g != null)
