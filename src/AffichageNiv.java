@@ -31,7 +31,7 @@ public class AffichageNiv extends JPanel {
 			for (int j = 0; j < largeur; j++) {
 				JButton bouton = new JButton(Integer.toString(i+j));
 				//à changer selon la case i j du plateau (setIcon, addActionListener(modele.jouer(i, j))
-				Case current= modele.currentPlat.grid[i][j];
+			    Case current= modele.currentPlat.grid[i][j];
 				switch(current.k) {
 				
 				case 0:
@@ -39,6 +39,8 @@ public class AffichageNiv extends JPanel {
 					break;
 				case 1:
 					bouton.setBackground(Color.RED);
+					bouton.addActionListener((event) -> modele.currentPlat.supprimer(bouton.getX(), bouton.getY(), true));
+					//je t'<3
 					break;
 				case 2:
 					bouton.setBackground(Color.GREEN);
@@ -57,5 +59,7 @@ public class AffichageNiv extends JPanel {
 			}
 		this.add(affichagePlateau, BorderLayout.CENTER);
 	}
+
+
 
 }
