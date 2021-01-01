@@ -61,7 +61,7 @@ public class AffichageSelect extends JPanel {
 			niveaux.add(niv);
 			this.add(niv);
 		}
-		play = new JButton("Jouer au niveau 1 !");
+		play = new JButton("Jouer au niveau "+ this.modele.cursorNiv +" !");
 		play.setOpaque(false);
 		play.setContentAreaFilled(false);
 		play.setFont(new Font("Arial", Font.BOLD, 40));

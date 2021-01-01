@@ -15,7 +15,7 @@ public class Environnement implements Serializable{
 	//
 
 	public Environnement () {
-		maxNiv = 2;
+		maxNiv = 1;
 		cursorNiv = 1;
 	}
 	
