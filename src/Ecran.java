@@ -26,7 +26,8 @@ public class Ecran extends JFrame{
 		envi.setScreen(this);
 		menu();
 	}
-	
+
+
 	// Retour à l'écran de selection, plein de choses doivent changer
 	public void select() {
 		if (selection == null)
