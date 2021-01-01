@@ -3,6 +3,7 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.GridLayout;
 
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
@@ -31,35 +32,34 @@ public class AffichageNiv extends JPanel {
 		for (int i = 0; i < hauteur; i++) 
 			for (int j = 0; j < largeur; j++) {
 				Bouton bouton = new Bouton(i,j);
+				bouton.setBorderPainted(false);
+				bouton.setOpaque(false);
 				//à changer selon la case i j du plateau (setIcon, addActionListener(modele.jouer(i, j))
-
 				Case current= modele.currentPlat.grid[i][j];
 				switch(current.k) {
-
 				case 0:
-					bouton.setBackground(Color.WHITE);
+					bouton.setOpaque(false);
 					bouton.setEnabled(false);
 					break;
 				case 1:
-					bouton.setBackground(Color.RED);
+					bouton.setIcon(new ImageIcon("images/asteroid1.png"));
 					bouton.addActionListener((event) -> {modele.currentPlat.supprimer(bouton.x, bouton.y, true);
 					actualiser();});
-
-					//je<3
 					break;
 				case 2:
-					bouton.setBackground(Color.GREEN);
+					bouton.setIcon(new ImageIcon("images/asteroid2.png"));
 					bouton.addActionListener((event) -> {modele.currentPlat.supprimer(bouton.x, bouton.y, true);
 					actualiser();});
 					break;
 				case 3:
-					bouton.setBackground(Color.BLUE);
+					bouton.setIcon(new ImageIcon("images/asteroid3.png"));
 					bouton.addActionListener((event) -> {modele.currentPlat.supprimer(bouton.x, bouton.y, true);
 
 					actualiser();});
 					break;
 				case 4:
 					bouton.setEnabled(false);
+					bouton.setOpaque(true);
 					bouton.setBackground(Color.BLACK);
 					bouton.addActionListener((event) -> {modele.currentPlat.supprimer(bouton.x, bouton.y, true);
 					actualiser();});
@@ -88,8 +88,7 @@ public class AffichageNiv extends JPanel {
 
 			case 0:
 				bouton.setEnabled(false);
-				bouton.setBackground(Color.WHITE);
-
+				bouton.setIcon(null);
 				break;
 			case 1:
 				bouton.setBackground(Color.RED);
