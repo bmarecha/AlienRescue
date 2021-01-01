@@ -20,7 +20,7 @@ public class AffichageSelect extends JPanel {
 	private static final long serialVersionUID = 1L;
 	Environnement modele;
 	ArrayList<Bouton> niveaux = new ArrayList<>();
-	JButton play;
+	JButton play, home, save;
 	private Image bgImage = null;
 	
 	public AffichageSelect (Environnement e) {
@@ -61,9 +61,7 @@ public class AffichageSelect extends JPanel {
 			niveaux.add(niv);
 			this.add(niv);
 		}
-		play = new JButton("Jouer au niveau 1 !");
-		play.setHorizontalTextPosition(JButton.CENTER);
-		play.setVerticalTextPosition(JButton.CENTER);
+		play = new JButton("Jouer au niveau "+ this.modele.cursorNiv +" !");
 		play.setOpaque(false);
 		play.setContentAreaFilled(false);
 		play.setFont(new Font("Arial", Font.BOLD, 40));
@@ -76,6 +74,23 @@ public class AffichageSelect extends JPanel {
 			play.setBackground(Color.cyan);
 		play.addActionListener((event) -> modele.chargerNiveau());
 		this.add(play);
+		home = new JButton();
+		home.setContentAreaFilled(false);
+		home.setOpaque(false);
+		home.setBorderPainted(false);
+		home.setIcon(new ImageIcon("images/home.png"));
+		home.setBounds(0, 0, 70, 70);
+		home.addActionListener((event)-> modele.screen.menu());
+		this.add(home);
+		save = new JButton();
+		save.setContentAreaFilled(false);
+		save.setOpaque(false);
+		save.setBorderPainted(false);
+		save.setIcon(new ImageIcon("images/save.png"));
+		save.setBounds(530, 0, 70, 70);
+		save.addActionListener((event)-> {modele.save();save.setIcon(new ImageIcon("images/checkmark.png"));save.setEnabled(false);});
+		this.add(save);
+		
 	}
 	
 	@Override
@@ -101,6 +116,8 @@ public class AffichageSelect extends JPanel {
 				this.niveaux.get(i - 1).setBorder(BorderFactory.createLineBorder(Color.green));
 			}
 		}
+		save.setIcon(new ImageIcon("images/save.png"));
+		save.setEnabled(true);
 	}
 	
 	// Click sur un bouton de séléction

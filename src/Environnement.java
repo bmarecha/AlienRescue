@@ -1,19 +1,21 @@
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.io.Serializable;
 
 public class Environnement implements Serializable{
 	private static final long serialVersionUID = 3968155942580492870L;
 	public int maxNiv;
 	public int cursorNiv;
-	public Niveau current;
-	private Ecran screen;
+	public transient Niveau current;
+	 transient Ecran screen;
 	//
 
 	public Environnement () {
-		maxNiv = 2;
+		maxNiv = 1;
 		cursorNiv = 1;
 	}
 	
@@ -46,6 +48,19 @@ public class Environnement implements Serializable{
 			AffichageNiv panelNiv= new AffichageNiv(current);
 			this.screen.setContentPane(panelNiv);
 			this.screen.setVisible(true);
+		}
+	}
+	
+	public void save() {
+		File save = new File("Firstsave.ser");
+		ObjectOutputStream oos;
+		try {
+			oos = new ObjectOutputStream(new FileOutputStream(save));
+			oos.writeObject(this);
+			oos.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+			return;
 		}
 	}
 	
