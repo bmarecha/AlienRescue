@@ -9,7 +9,11 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.BevelBorder;
@@ -20,23 +24,52 @@ public class AffichageSelect extends JPanel {
 	private static final long serialVersionUID = 1L;
 	Environnement modele;
 	ArrayList<Bouton> niveaux = new ArrayList<>();
-	JButton play, home, save;
+	JButton play, home, save, audio;
+	String music;
 	private Image bgImage = null;
 	
 	public AffichageSelect (Environnement e) {
 		modele = e;
 		this.setLayout(null);//new GridLayout(6, 1));
 		File f = new File("images/Planets.jpg");
+		File music= new File("music/soar-noisy_oyster.wav");
+
 		if (f.exists()) {
 			try {
 				bgImage = ImageIO.read(f);
 				bgImage = new ImageIcon("images/Planets.jpg").getImage();
+				
+				
 				System.out.println("Supposed to be painted...");
 			} catch (IOException except) {
 				except.printStackTrace();
 			}
-		} else {
+			
+		}
+		if(music.exists()){
+			try {
+				AudioInputStream audioInput= AudioSystem.getAudioInputStream(music);
+				Clip clip = AudioSystem.getClip();
+				clip.open(audioInput);
+				clip.start();
+				clip.loop(Clip.LOOP_CONTINUOUSLY);
+			} catch (UnsupportedAudioFileException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			} catch (LineUnavailableException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			
+		}if(!f.exists()) {
+		
 			System.out.println("BackgroundImg, bad link.");
+		}
+		if(!music.exists()) {
+			System.out.println("Music not found!");
 		}
 		for (int i = 1; i < 6; i++)
 		{
@@ -65,7 +98,7 @@ public class AffichageSelect extends JPanel {
 		play.setOpaque(false);
 		play.setContentAreaFilled(false);
 		play.setFont(new Font("Arial", Font.BOLD, 40));
-		play.setBounds(80, 800, 480, 50);
+		play.setBounds(80, 600, 480, 50);
 		play.setBorderPainted(false);
 		Image g = null;
 		if (g != null)
@@ -90,7 +123,15 @@ public class AffichageSelect extends JPanel {
 		save.setBounds(530, 0, 70, 70);
 		save.addActionListener((event)-> {modele.save();save.setIcon(new ImageIcon("images/checkmark.png"));save.setEnabled(false);});
 		this.add(save);
-		
+		audio = new JButton();
+		audio.setContentAreaFilled(false);
+		audio.setOpaque(false);
+		audio.setBorderPainted(false);
+		audio.setIcon(new ImageIcon("images/audio.png"));
+		audio.setBounds(0, 660, 50, 50);
+		audio.addActionListener((event)-> {;audio.setIcon(new ImageIcon("images/no-audio.png"));});
+
+		this.add(audio);
 	}
 	
 	@Override
