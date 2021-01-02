@@ -45,6 +45,7 @@ public class Plateau {
 			if(a-i>=0 && a-i<this.hauteur && i!=0 && !grid[a-i][b].checked && grid[a-i][b].k== color) {
 				supprimer(a-i, b, false);
 				neighbour=true;
+				
 			}
 		}
 		for (int i=-1; i<=1; i++) {
@@ -57,9 +58,28 @@ public class Plateau {
 		if(!first || neighbour) {		
 			grid[a][b].k=0;
 			System.out.println(a+" "+b);
+			if(first)
+				tomber();
+
 		}
 	}
 	
-	
+	public void tomber() {
+		
+		for(int i=1; i<this.hauteur; i++) {
+			for(int j=0; j<=this.largeur-1; j++) {
+				grid[i][j].checked=false;
+				if(grid[i][j].k==0 ) {
+					for(int z=i; z>0; z--) {
+					int d = grid[z][j].k;
+					grid[z][j].k=grid[z-1][j].k;
+					grid[z-1][j].k=d;
+				
+					}
+				}
+			}
+		}
+	}
+
 	
 }
