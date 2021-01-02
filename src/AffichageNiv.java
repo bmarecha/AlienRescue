@@ -18,8 +18,8 @@ public class AffichageNiv extends JPanel {
 	Niveau modele;
 	JPanel affichagePlateau;
 	private Image bgImage = null;
-	ImageIcon aster1 = new ImageIcon("images/asteroid1.png");
-	ImageIcon aster2 = new ImageIcon("images/asteroid2.png");
+	ImageIcon aster2 = new ImageIcon("images/asteroid1.png");
+	ImageIcon aster1 = new ImageIcon("images/asteroid2.png");
 	ImageIcon aster3 = new ImageIcon("images/asteroid3.png");
 	ImageIcon alien = new ImageIcon("images/alien2.png");
 
