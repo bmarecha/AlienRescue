@@ -66,20 +66,32 @@ public class Plateau {
 	
 	public void tomber() {
 		
-		for(int i=1; i<this.hauteur; i++) {
+		for(int i=this.hauteur - 1; i >= 0; i--) {
 			for(int j=0; j<=this.largeur-1; j++) {
 				grid[i][j].checked=false;
-				if(grid[i][j].k==0 ) {
-					for(int z=i; z>0; z--) {
-					int d = grid[z][j].k;
-					grid[z][j].k=grid[z-1][j].k;
-					grid[z-1][j].k=d;
-				
+				if(grid[i][j].k!=0 && i != this.hauteur-1) {
+					int z;
+					for(z=i+1; z<this.hauteur; z++) {
+						if (grid[z][j].k != 0) {
+							break;
+						}
+					}
+					z--;
+					if (z != i) {
+						int d = grid[z][j].k;
+						grid[z][j].k=grid[i][j].k;
+						grid[i][j].k=d;
 					}
 				}
 			}
 		}
 	}
-
-	
 }
+/*
+o
+o
+x
+x
+o
+o
+*/
