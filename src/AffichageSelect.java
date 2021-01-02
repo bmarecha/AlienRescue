@@ -24,16 +24,17 @@ public class AffichageSelect extends JPanel {
 	private static final long serialVersionUID = 1L;
 	Environnement modele;
 	ArrayList<Bouton> niveaux = new ArrayList<>();
-	JButton play, home, save, audio;
-	String music;
+	JButton play, home, save, music;
+	boolean noSound;
 	private Image bgImage = null;
+	
 	
 	public AffichageSelect (Environnement e) {
 		modele = e;
 		this.setLayout(null);//new GridLayout(6, 1));
 		File f = new File("images/Planets.jpg");
-		File music= new File("music/soar-noisy_oyster.wav");
-
+		File musicFile= new File("music/soar-noisy_oyster.wav");
+		Environnement.play(musicFile, true);
 		if (f.exists()) {
 			try {
 				bgImage = ImageIO.read(f);
@@ -46,31 +47,11 @@ public class AffichageSelect extends JPanel {
 			}
 			
 		}
-		if(music.exists()){
-			try {
-				AudioInputStream audioInput= AudioSystem.getAudioInputStream(music);
-				Clip clip = AudioSystem.getClip();
-				clip.open(audioInput);
-				clip.start();
-				clip.loop(Clip.LOOP_CONTINUOUSLY);
-			} catch (UnsupportedAudioFileException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			} catch (LineUnavailableException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			} catch (IOException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
-			
-		}if(!f.exists()) {
+		else{
 		
 			System.out.println("BackgroundImg, bad link.");
 		}
-		if(!music.exists()) {
-			System.out.println("Music not found!");
-		}
+		
 		for (int i = 1; i < 6; i++)
 		{
 			int x =  240;
@@ -123,15 +104,21 @@ public class AffichageSelect extends JPanel {
 		save.setBounds(530, 0, 70, 70);
 		save.addActionListener((event)-> {modele.save();save.setIcon(new ImageIcon("images/checkmark.png"));save.setEnabled(false);});
 		this.add(save);
-		audio = new JButton();
-		audio.setContentAreaFilled(false);
-		audio.setOpaque(false);
-		audio.setBorderPainted(false);
-		audio.setIcon(new ImageIcon("images/audio.png"));
-		audio.setBounds(0, 660, 50, 50);
-		audio.addActionListener((event)-> {;audio.setIcon(new ImageIcon("images/no-audio.png"));});
-
-		this.add(audio);
+		music = new JButton();
+		music.setContentAreaFilled(false);
+		music.setOpaque(false);
+		music.setBorderPainted(false);
+		music.setIcon(new ImageIcon("images/musicOn.png"));
+		music.setBounds(0, 660, 50, 50);
+		music.addActionListener((event)-> {music.setIcon(new ImageIcon("images/musicOff.png")); Environnement.play(musicFile, false); music.setEnabled(true);});
+		
+		if(noSound) {
+			//music.setEnabled(true);
+			System.out.print("ses yok");
+			music.addActionListener((event)->  {music.setIcon(new ImageIcon("images/musicOn.png"));Environnement.play(musicFile, true); music.setEnabled(true);});
+		}
+		this.add(music);
+		
 	}
 	
 	@Override
