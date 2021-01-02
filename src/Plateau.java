@@ -15,7 +15,7 @@ public class Plateau {
 		largeur=l;
 		grid = new Case[hauteur][largeur];
 
-		String s = "rrrrvb"+"rrbbvv"+"vvbbbr"+"bbbrrv"+"vvrrbb"+"bvvvrr";
+		String s = "arrrvx"+"rrbbvv"+"vvbbbr"+"bbbrrv"+"vvrrbb"+"bvvvrr";
 		for(int i=0; i<hauteur; i++) {
 			for(int j=0; j<largeur; j++) {
 				switch(s.charAt((i*6 + j)% s.length())){
@@ -28,7 +28,14 @@ public class Plateau {
 				case 'b':
 					grid[i][j]= new Case(false, 3);
 					break;
-
+				case 'x':
+					grid[i][j] = new Case (false, 0);
+					break;
+				case 'a':
+					grid[i][j] = new Case (true, 4);					
+					break;
+				default:
+					break;
 				}
 			}
 		}

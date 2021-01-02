@@ -18,6 +18,10 @@ public class AffichageNiv extends JPanel {
 	Niveau modele;
 	JPanel affichagePlateau;
 	private Image bgImage = null;
+	ImageIcon aster1 = new ImageIcon("images/asteroid1.png");
+	ImageIcon aster2 = new ImageIcon("images/asteroid2.png");
+	ImageIcon aster3 = new ImageIcon("images/asteroid3.png");
+	ImageIcon alien = new ImageIcon("images/alien2.png");
 
 	public AffichageNiv (Niveau n) {
 		this.setLayout(new BorderLayout());
@@ -72,32 +76,27 @@ public class AffichageNiv extends JPanel {
 				Case current= modele.currentPlat.grid[i][j];
 				switch(current.k) {
 				case 0:
-					bouton.setOpaque(false);
 					bouton.setEnabled(false);
 					break;
 				case 1:
-					bouton.setOpaque(false);
-					bouton.setIcon(new ImageIcon("images/asteroid1.png"));
+					bouton.setIcon(aster1);
 					bouton.addActionListener((event) -> {modele.currentPlat.supprimer(bouton.x, bouton.y, true);
 					actualiser();});
 					break;
 				case 2:
-					bouton.setOpaque(false);
-					bouton.setIcon(new ImageIcon("images/asteroid2.png"));
+					bouton.setIcon(aster2);
 					bouton.addActionListener((event) -> {modele.currentPlat.supprimer(bouton.x, bouton.y, true);
 					actualiser();});
 					break;
 				case 3:
-					bouton.setOpaque(false);
-					bouton.setIcon(new ImageIcon("images/asteroid3.png"));
+					bouton.setIcon(aster3);
 					bouton.addActionListener((event) -> {modele.currentPlat.supprimer(bouton.x, bouton.y, true);
 
 					actualiser();});
 					break;
 				case 4:
-					bouton.setEnabled(false);
-					bouton.setOpaque(true);
-					bouton.setBackground(Color.BLACK);
+					bouton.setIcon(alien);
+					bouton.setDisabledIcon(alien);
 					bouton.addActionListener((event) -> {modele.currentPlat.supprimer(bouton.x, bouton.y, true);
 					actualiser();});
 					break;
@@ -118,23 +117,24 @@ public class AffichageNiv extends JPanel {
 		for (int i=0; i<component.length; i++) {
 			Bouton bouton = (Bouton)component[i];
 			switch(plato.grid[bouton.x][bouton.y].k) {
-
 			case 0:
 				bouton.setEnabled(false);
 				bouton.setIcon(null);
+				bouton.setDisabledIcon(null);
 				break;
 			case 1:
-				bouton.setIcon(new ImageIcon("images/asteroid1.png"));
+				bouton.setIcon(aster1);
 				break;
 			case 2:
-				bouton.setIcon(new ImageIcon("images/asteroid2.png"));
+				bouton.setIcon(aster2);
 				break;
 			case 3:
-				bouton.setIcon(new ImageIcon("images/asteroid3.png"));
+				bouton.setIcon(aster3);
 				break;
 			case 4:
 				bouton.setEnabled(false);
-				bouton.setBackground(Color.BLACK);
+				bouton.setIcon(alien);
+				bouton.setDisabledIcon(alien);
 				break;
 
 			}
