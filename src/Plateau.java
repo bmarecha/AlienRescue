@@ -58,14 +58,14 @@ public class Plateau {
 		if(!first || neighbour) {		
 			grid[a][b].k=0;
 			System.out.println(a+" "+b);
-			if(first)
+			if(first) {
 				tomber();
-
+				glisser();
+			}
 		}
 	}
 	
 	public void tomber() {
-		
 		for(int i=this.hauteur - 1; i >= 0; i--) {
 			for(int j=0; j<=this.largeur-1; j++) {
 				grid[i][j].checked=false;
@@ -83,6 +83,23 @@ public class Plateau {
 						grid[i][j].k=d;
 					}
 				}
+			}
+		}
+	}
+	
+	public void glisser() {
+		for (int j = 0; j <=this.largeur - 2; j++) {
+			int i = this.hauteur - 1;
+			if (grid[i][j].k == 0) {
+				int z = j;
+				while (++z < this.largeur)
+					if (grid[i][z].k != 0)
+						while (i > 0) {
+							int d = grid[i][z].k;
+							grid[i][z].k=grid[i][j].k;
+							grid[i][j].k=d;
+							i--;
+						}
 			}
 		}
 	}
