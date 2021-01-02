@@ -1,6 +1,7 @@
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.GridLayout;
@@ -11,11 +12,14 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.SwingConstants;
 
 public class AffichageNiv extends JPanel {
 	private static final long serialVersionUID = 1L;
 	Niveau modele;
+	JLabel score, aliens;
 	JPanel affichagePlateau;
 	private Image bgImage = null;
 	ImageIcon aster1 = new ImageIcon("images/asteroid1.png");
@@ -25,13 +29,20 @@ public class AffichageNiv extends JPanel {
 
 	public AffichageNiv (Niveau n) {
 		this.setLayout(new BorderLayout());
+		modele = n;
 
 		// Affichage des informations du niveau
-		modele = n;
 		JButton exit = new JButton();
 		exit.addActionListener((event) -> modele.retour());
 		exit.setText("Quitter le niveau " + modele.num);
+		exit.setFont(new Font("Arial", Font.BOLD, 15));
 		this.add(exit, BorderLayout.SOUTH);
+		score = new JLabel("0", SwingConstants.LEFT);
+		score.setFont(new Font("Arial", Font.BOLD, 30));
+		this.add(score, BorderLayout.NORTH);
+		aliens = new JLabel("0/" + modele.totalAlien, alien, SwingConstants.RIGHT);
+		aliens.setFont(new Font("Arial", Font.BOLD, 30));
+		this.add(aliens, BorderLayout.NORTH);
 		File f;
 		switch (modele.num) {
 		case 1:
@@ -80,25 +91,20 @@ public class AffichageNiv extends JPanel {
 					break;
 				case 1:
 					bouton.setIcon(aster1);
-					bouton.addActionListener((event) -> {modele.currentPlat.supprimer(bouton.x, bouton.y, true);
-					actualiser();});
+					bouton.addActionListener((event) -> {modele.jouer(bouton.x, bouton.y);actualiser();});
 					break;
 				case 2:
 					bouton.setIcon(aster2);
-					bouton.addActionListener((event) -> {modele.currentPlat.supprimer(bouton.x, bouton.y, true);
-					actualiser();});
+					bouton.addActionListener((event) -> {modele.jouer(bouton.x, bouton.y);actualiser();});
 					break;
 				case 3:
 					bouton.setIcon(aster3);
-					bouton.addActionListener((event) -> {modele.currentPlat.supprimer(bouton.x, bouton.y, true);
-
-					actualiser();});
+					bouton.addActionListener((event) -> {modele.jouer(bouton.x, bouton.y);actualiser();});
 					break;
 				case 4:
 					bouton.setIcon(alien);
 					bouton.setDisabledIcon(alien);
-					bouton.addActionListener((event) -> {modele.currentPlat.supprimer(bouton.x, bouton.y, true);
-					actualiser();});
+					bouton.addActionListener((event) -> {modele.jouer(bouton.x, bouton.y);actualiser();});
 					break;
 
 				}
@@ -111,6 +117,17 @@ public class AffichageNiv extends JPanel {
 
 	}
 	public void actualiser(){
+		//Divers
+		score.setText(Integer.toString(modele.currentScore));
+		aliens.setText(modele.savedAlien + "/" + modele.totalAlien);
+		if (modele.savedAlien == modele.totalAlien) {
+			JLabel victory = new JLabel("Vous avez gagné !");
+			victory.setFont(new Font("Arial", Font.BOLD, 50));
+			victory.setForeground(Color.WHITE);
+			victory.setBackground(Color.BLACK);
+			this.add(victory, BorderLayout.CENTER);
+		}
+		//Actualisation du Plateau
 		Component [] component = affichagePlateau.getComponents();
 		//if !alien
 		Plateau plato = modele.currentPlat;
@@ -123,12 +140,15 @@ public class AffichageNiv extends JPanel {
 				bouton.setDisabledIcon(null);
 				break;
 			case 1:
+				bouton.setEnabled(true);
 				bouton.setIcon(aster1);
 				break;
 			case 2:
+				bouton.setEnabled(true);
 				bouton.setIcon(aster2);
 				break;
 			case 3:
+				bouton.setEnabled(true);
 				bouton.setIcon(aster3);
 				break;
 			case 4:

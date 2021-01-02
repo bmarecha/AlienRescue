@@ -1,5 +1,7 @@
+import java.io.Serializable;
 
-public class Plateau {
+public class Plateau implements Serializable{
+	private static final long serialVersionUID = 1L;
 	Case[][] grid;
 	int hauteur;
 	int largeur;
@@ -43,33 +45,31 @@ public class Plateau {
 	boolean first;
 	boolean neighbour;
 	
-	public void supprimer(int a, int b, boolean first) {
+	public int supprimer(int a, int b, boolean first) {
+		int res = 0;
 		int color = grid[a][b].k;
 		grid[a][b].checked= true;
 		neighbour=false;
 
 		for (int i=-1; i<=1; i++) {
 			if(a-i>=0 && a-i<this.hauteur && i!=0 && !grid[a-i][b].checked && grid[a-i][b].k== color) {
-				supprimer(a-i, b, false);
+				res += supprimer(a-i, b, false);
 				neighbour=true;
 				
 			}
 		}
 		for (int i=-1; i<=1; i++) {
 			if(b-i>=0 && b-i<this.largeur && i!=0 && !grid[a][b-i].checked && grid[a][b-i].k== color) {
-				supprimer(a, b-i, false);
+				res += supprimer(a, b-i, false);
 				neighbour=true;
 
 			}
 		}
-		if(!first || neighbour) {		
+		if(!first || neighbour) {
 			grid[a][b].k=0;
-			System.out.println(a+" "+b);
-			if(first) {
-				tomber();
-				glisser();
-			}
+			res+= 100;
 		}
+		return res;
 	}
 	
 	public void tomber() {
@@ -92,6 +92,16 @@ public class Plateau {
 				}
 			}
 		}
+	}
+	
+	public int suppAlien() {
+		int res = 0;
+		for (Case c : grid[this.hauteur - 1])
+			if (c.k == 4) {
+				c.supp();
+				res++;
+			}
+		return res;
 	}
 	
 	public void glisser() {

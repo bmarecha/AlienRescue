@@ -65,8 +65,8 @@ public class Environnement implements Serializable{
 	}
 	
 	// Le niveau a été quitté donc le score ou nombre de niveau disponibles ont peut être changer
-	public void niveauFini() {
-		if (this.cursorNiv == maxNiv)
+	public void niveauFini(boolean gagner) {
+		if (this.cursorNiv == maxNiv && gagner)
 			maxNiv++;
 		this.screen.select();
 	}
