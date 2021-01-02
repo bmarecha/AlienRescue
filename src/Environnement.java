@@ -42,7 +42,7 @@ public class Environnement implements Serializable{
 				e.printStackTrace();
 			}
 		} else { // Tant qu'on a pas de fichier sauvegardés pour les niveaux
-			System.out.println("Raté ce fichier n'existe pas.");
+			System.out.println("Fichier pas encore créé. Chargement du niveau par défaut.");
 			current = new Niveau(cursorNiv);
 			current.setEnvironnement(this);
 			AffichageNiv panelNiv= new AffichageNiv(current);
@@ -68,7 +68,6 @@ public class Environnement implements Serializable{
 	public void niveauFini() {
 		if (this.cursorNiv == maxNiv)
 			maxNiv++;
-		System.out.println(cursorNiv + " " + maxNiv);
 		this.screen.select();
 	}
 }

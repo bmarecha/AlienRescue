@@ -38,6 +38,7 @@ public class Ecran extends JFrame{
 		this.setContentPane(selection);
 		this.setVisible(true);
 	}
+
 	
 	public void menu() {
 		if (menu == null)
@@ -97,3 +98,4 @@ public class Ecran extends JFrame{
 		}
 	}
 }
+
