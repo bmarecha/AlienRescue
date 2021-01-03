@@ -8,18 +8,23 @@ import java.awt.GridLayout;
 import java.awt.Image;
 import java.io.File;
 import java.io.IOException;
+import java.util.Dictionary;
+import java.util.HashMap;
+import java.util.Hashtable;
 
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JSlider;
 import javax.swing.SwingConstants;
 
 public class AffichageNiv extends JPanel {
 	private static final long serialVersionUID = 1L;
 	Niveau modele;
 	JLabel score, aliens;
+	JSlider goal;
 	JPanel affichagePlateau;
 	private Image bgImage = null;
 	ImageIcon aster1 = new ImageIcon("images/asteroid1.png");
@@ -37,12 +42,22 @@ public class AffichageNiv extends JPanel {
 		exit.setText("Quitter le niveau " + modele.num);
 		exit.setFont(new Font("Arial", Font.BOLD, 15));
 		this.add(exit, BorderLayout.SOUTH);
+		JPanel hud = new JPanel();
+		hud.setLayout(new GridLayout(1,3));
+		hud.setOpaque(false);
 		score = new JLabel("0", SwingConstants.LEFT);
 		score.setFont(new Font("Arial", Font.BOLD, 30));
-		this.add(score, BorderLayout.NORTH);
+		hud.add(score);
+		goal = new JSlider(0, modele.totalAlien*50 + modele.totalCase);
+		Dictionary<Integer, JLabel> labels = new Hashtable<>();
+		for (int star : modele.starScore)
+			labels.put(star, new JLabel(new ImageIcon("images/star.png")));
+		goal.setLabelTable(labels);
+		hud.add(goal);
 		aliens = new JLabel("0/" + modele.totalAlien, alien, SwingConstants.RIGHT);
 		aliens.setFont(new Font("Arial", Font.BOLD, 30));
-		this.add(aliens, BorderLayout.NORTH);
+		hud.add(aliens);
+		this.add(hud, BorderLayout.NORTH);
 		File f;
 		switch (modele.num) {
 		case 1:
@@ -84,52 +99,36 @@ public class AffichageNiv extends JPanel {
 				bouton.setOpaque(false);
 				bouton.setIcon(null);
 				//à changer selon la case i j du plateau (setIcon, addActionListener(modele.jouer(i, j))
-				Case current= modele.currentPlat.grid[i][j];
-				switch(current.k) {
-				case 0:
-					bouton.setEnabled(false);
-					break;
-				case 1:
-					bouton.setIcon(aster1);
-					bouton.addActionListener((event) -> {modele.jouer(bouton.x, bouton.y);actualiser();});
-					break;
-				case 2:
-					bouton.setIcon(aster2);
-					bouton.addActionListener((event) -> {modele.jouer(bouton.x, bouton.y);actualiser();});
-					break;
-				case 3:
-					bouton.setIcon(aster3);
-					bouton.addActionListener((event) -> {modele.jouer(bouton.x, bouton.y);actualiser();});
-					break;
-				case 4:
-					bouton.setIcon(alien);
-					bouton.setDisabledIcon(alien);
-					bouton.addActionListener((event) -> {modele.jouer(bouton.x, bouton.y);actualiser();});
-					break;
-
-				}
+				bouton.addActionListener((event) -> {modele.jouer(bouton.x, bouton.y);actualiser();});
+				
 				affichagePlateau.add(bouton);
 
 			}
 		this.add(affichagePlateau, BorderLayout.CENTER);
-
-		
-
+		this.refreshPlat();
 	}
+	
 	public void actualiser(){
 		//Divers
 		score.setText(Integer.toString(modele.currentScore));
 		aliens.setText(modele.savedAlien + "/" + modele.totalAlien);
-		if (modele.savedAlien == modele.totalAlien) {
-			JLabel victory = new JLabel("Vous avez gagné !");
+		if (modele.gameState != 0) {
+			JLabel victory = new JLabel();
+			if (modele.gameState == -1)
+				victory.setText("Vous avez perdu !");
+			else
+				victory.setText("Vous avez gagné !");
 			victory.setFont(new Font("Arial", Font.BOLD, 50));
 			victory.setForeground(Color.WHITE);
 			victory.setBackground(Color.BLACK);
 			this.add(victory, BorderLayout.CENTER);
 		}
 		//Actualisation du Plateau
+		refreshPlat();
+	}
+	
+	public void refreshPlat() {
 		Component [] component = affichagePlateau.getComponents();
-		//if !alien
 		Plateau plato = modele.currentPlat;
 		for (int i=0; i<component.length; i++) {
 			Bouton bouton = (Bouton)component[i];
@@ -162,7 +161,7 @@ public class AffichageNiv extends JPanel {
 		}
 	}
 	
-
+	
 	@Override
 	  protected void paintComponent(Graphics g) {
 	    super.paintComponent(g);
