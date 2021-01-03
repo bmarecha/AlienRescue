@@ -5,6 +5,8 @@ import java.awt.Graphics2D;
 import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -24,17 +26,18 @@ public class AffichageSelect extends JPanel {
 	private static final long serialVersionUID = 1L;
 	Environnement modele;
 	ArrayList<Bouton> niveaux = new ArrayList<>();
-	JButton play, home, save, music;
-	boolean noSound;
+	JButton play, home, save, music, noMusic;
+	boolean noSound= false;
 	private Image bgImage = null;
+	String s=null;
 	
 	
 	public AffichageSelect (Environnement e) {
 		modele = e;
+		s="music";
 		this.setLayout(null);//new GridLayout(6, 1));
 		File f = new File("images/Planets.jpg");
-		File musicFile= new File("music/soar-noisy_oyster.wav");
-		Environnement.play(musicFile, true);
+		
 		if (f.exists()) {
 			try {
 				bgImage = ImageIO.read(f);
@@ -104,22 +107,61 @@ public class AffichageSelect extends JPanel {
 		save.setBounds(530, 0, 70, 70);
 		save.addActionListener((event)-> {modele.save();save.setIcon(new ImageIcon("images/checkmark.png"));save.setEnabled(false);});
 		this.add(save);
-		music = new JButton();
+		music = new JButton(s);
 		music.setContentAreaFilled(false);
 		music.setOpaque(false);
 		music.setBorderPainted(false);
-		music.setIcon(new ImageIcon("images/musicOn.png"));
-		music.setBounds(0, 660, 50, 50);
-		music.addActionListener((event)-> {music.setIcon(new ImageIcon("images/musicOff.png")); Environnement.play(musicFile, false); music.setEnabled(true);});
+		music.setBounds(0, 660, 70, 70);
+		music.addActionListener(
+				new ActionListener() {
+
+					public void actionPerformed(ActionEvent e) {
+						File f= new File("/music/soar-noisy_oyster.wav");
+						music.setIcon("images/musicOn.png");
+						s="music";
+
+						if(f.exists()){
+							try {
+								AudioInputStream audioInput= AudioSystem.getAudioInputStream(f);
+								Clip clip = AudioSystem.getClip();
+								if (e.getActionCommand().equals("music")) {
+									clip.open(audioInput);
+									clip.start();
+									clip.loop(Clip.LOOP_CONTINUOUSLY);
+									s="noMusic";
+									music.setIcon("images/musicOn.png");
+								}
+								if (e.getActionCommand().equals("noMusic")) {
+									clip.stop();	
+									s="music";
+									music.setIcon("images/musicOff.png");
+
+
+								}
+							} catch (UnsupportedAudioFileException e1) {
+								// TODO Auto-generated catch block
+								e1.printStackTrace();
+							} catch (LineUnavailableException e1) {
+								// TODO Auto-generated catch block
+								e1.printStackTrace();
+							} catch (IOException e1) {
+								// TODO Auto-generated catch block
+								e1.printStackTrace();
+							}
+
+
+
+						}
+					}
+				});
 		
-		if(noSound) {
-			//music.setEnabled(true);
-			System.out.print("ses yok");
-			music.addActionListener((event)->  {music.setIcon(new ImageIcon("images/musicOn.png"));Environnement.play(musicFile, true); music.setEnabled(true);});
-		}
+		
+		
 		this.add(music);
-		
 	}
+	
+
+		
 	
 	@Override
 	  protected void paintComponent(Graphics g) {

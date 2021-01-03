@@ -72,29 +72,7 @@ public class Environnement implements Serializable{
 
 	
 	public static void play(File f, boolean music) {
-		if(f.exists()){
-			try {
-				AudioInputStream audioInput= AudioSystem.getAudioInputStream(f);
-				Clip clip = AudioSystem.getClip();
-				if (music) {
-					clip.open(audioInput);
-					clip.start();
-					clip.loop(Clip.LOOP_CONTINUOUSLY);
-				}else {
-					clip.stop();
-				}
-			} catch (UnsupportedAudioFileException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			} catch (LineUnavailableException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			} catch (IOException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
-			
-		}
+		
 	}
 
 	
