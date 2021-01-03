@@ -17,14 +17,28 @@ public class Plateau implements Serializable, Cloneable{
 		hauteur=h;
 		largeur=l;
 		grid = new Case[hauteur][largeur];
-
-		String s =
-				"arxaxx" +
-				"brbbxb" +
-				"vvbbxr"+
-				"bbbbrr"+
+		String s=
+				"arrxxx" +
+				"rrbbrx" +
+				"vvbarr"+
+				"bbbvvv"+
 				"vvrrbb"+
+				"brvvrr";
+/*
+		s =		"xxxxxx" +
+				"xxaxxr" +
+				"bvrbvr"+
+				"vrbvrb"+
+				"bvrbvr"+
+				"vrbvrb";
+				*//*
+		s =		"arrrxx" +
+				"brbbxb" +
+				"vvbaxr"+
+				"rbbvrv"+
+				"vrrrbb"+
 				"bvvvrr";
+				//*/
 		for(int i=0; i<hauteur; i++) {
 			for(int j=0; j<largeur; j++) {
 				switch(s.charAt((i*6 + j)% s.length())){
@@ -137,7 +151,7 @@ public class Plateau implements Serializable, Cloneable{
 		for (int a = 0; a <this.hauteur; a++)
 			for (int b = 0; b < this.largeur ; b++) {
 				int color = grid[a][b].k;
-				if (color != 0 || color != 4) {
+				if (color != 0 && color != 4) {
 					if (a-1>=0 && grid[a-1][b].k== color)
 						return true;
 					if (a+1<this.hauteur && grid[a+1][b].k== color)

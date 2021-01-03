@@ -1,3 +1,4 @@
+import java.awt.BasicStroke;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
@@ -6,6 +7,7 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.GridLayout;
 import java.awt.Image;
+import java.awt.RenderingHints;
 import java.io.File;
 import java.io.IOException;
 import java.util.Dictionary;
@@ -15,16 +17,20 @@ import java.util.Hashtable;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JProgressBar;
 import javax.swing.JSlider;
+import javax.swing.Painter;
 import javax.swing.SwingConstants;
+import javax.swing.UIDefaults;
 
 public class AffichageNiv extends JPanel {
 	private static final long serialVersionUID = 1L;
 	Niveau modele;
-	JLabel score, aliens;
-	JSlider goal;
+	JLabel score, aliens, victory;
+	JProgressBar goal;
 	JPanel affichagePlateau;
 	private Image bgImage = null;
 	ImageIcon aster1 = new ImageIcon("images/asteroid1.png");
@@ -33,31 +39,43 @@ public class AffichageNiv extends JPanel {
 	ImageIcon alien = new ImageIcon("images/alien2.png");
 
 	public AffichageNiv (Niveau n) {
-		this.setLayout(new BorderLayout());
+		this.setLayout(null);//new BorderLayout());
 		modele = n;
 
 		// Affichage des informations du niveau
-		JButton exit = new JButton();
-		exit.addActionListener((event) -> modele.retour());
-		exit.setText("Quitter le niveau " + modele.num);
-		exit.setFont(new Font("Arial", Font.BOLD, 15));
-		this.add(exit, BorderLayout.SOUTH);
 		JPanel hud = new JPanel();
-		hud.setLayout(new GridLayout(1,3));
+		hud.setLayout(null);
 		hud.setOpaque(false);
-		score = new JLabel("0", SwingConstants.LEFT);
+		JButton exit = new JButton(new ImageIcon("images/return.png"));
+		exit.addActionListener((event) -> modele.retour());
+		exit.setBounds(0, 0, 60, 60);
+		exit.setOpaque(false);
+		exit.setContentAreaFilled(false);
+		exit.setBorderPainted(false);
+		this.add(exit);
+		score = new JLabel("0", SwingConstants.RIGHT);
 		score.setFont(new Font("Arial", Font.BOLD, 30));
-		hud.add(score);
-		goal = new JSlider(0, modele.totalAlien*50 + modele.totalCase);
+		score.setBounds(60, 10, 120, 50);
+		this.add(score);
+		goal = new JProgressBar(0, modele.totalAlien*10 + modele.totalCase);
 		Dictionary<Integer, JLabel> labels = new Hashtable<>();
 		for (int star : modele.starScore)
-			labels.put(star, new JLabel(new ImageIcon("images/star.png")));
-		goal.setLabelTable(labels);
-		hud.add(goal);
+			labels.put(star / 100, new JLabel(new ImageIcon("images/star.png")));
+		goal.setOpaque(false);
+		goal.setBounds(190, 10, 300, 50);
+		this.add(goal);
 		aliens = new JLabel("0/" + modele.totalAlien, alien, SwingConstants.RIGHT);
 		aliens.setFont(new Font("Arial", Font.BOLD, 30));
-		hud.add(aliens);
-		this.add(hud, BorderLayout.NORTH);
+		aliens.setBounds(490, 10, 100, 60);
+		this.add(aliens);
+		victory = new JLabel();
+		victory.setFont(new Font("Arial", Font.BOLD, 40));
+		victory.setForeground(Color.WHITE);
+//		victory.setBackground(Color.BLACK);
+		victory.setBounds(0, 150, 550, 80);
+		this.add(victory);
+		hud.setBounds(0, 0, 600, 90);
+		//this.add(hud);
 		File f;
 		switch (modele.num) {
 		case 1:
@@ -100,31 +118,27 @@ public class AffichageNiv extends JPanel {
 				bouton.setIcon(null);
 				//à changer selon la case i j du plateau (setIcon, addActionListener(modele.jouer(i, j))
 				bouton.addActionListener((event) -> {modele.jouer(bouton.x, bouton.y);actualiser();});
-				
 				affichagePlateau.add(bouton);
 
 			}
-		this.add(affichagePlateau, BorderLayout.CENTER);
+		affichagePlateau.setBounds(0, 50, 600, 700);
+		this.add(affichagePlateau);
 		this.refreshPlat();
 	}
 	
 	public void actualiser(){
+		//Actualisation du Plateau
+		refreshPlat();
 		//Divers
 		score.setText(Integer.toString(modele.currentScore));
 		aliens.setText(modele.savedAlien + "/" + modele.totalAlien);
+		goal.setValue(modele.currentScore/100);
 		if (modele.gameState != 0) {
-			JLabel victory = new JLabel();
 			if (modele.gameState == -1)
 				victory.setText("Vous avez perdu !");
 			else
-				victory.setText("Vous avez gagné !");
-			victory.setFont(new Font("Arial", Font.BOLD, 50));
-			victory.setForeground(Color.WHITE);
-			victory.setBackground(Color.BLACK);
-			this.add(victory, BorderLayout.CENTER);
+				victory.setText("Vous avez gagné ! " + modele.gameState + "*");
 		}
-		//Actualisation du Plateau
-		refreshPlat();
 	}
 	
 	public void refreshPlat() {

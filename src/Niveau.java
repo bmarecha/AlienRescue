@@ -11,7 +11,7 @@ public class Niveau implements Serializable {
 	public final int totalAlien;
 	public final int totalCase;
 	public final BiFunction<Integer, Integer, Integer> stars;
-	public final int[] starScore = {5000, 10000, 13000};
+	public final int[] starScore = {2000, 4000, 5000};
 	
 	//Variables propre à la partie en cours
 	public transient Plateau currentPlat;
@@ -27,11 +27,11 @@ public class Niveau implements Serializable {
 		totalCase = countCase(startPlateau);
 		stars = ((score, alien) -> {
 			int res = 0;
-			if (score > starScore[0] && alien == totalAlien) {
+			if (score >= starScore[0] && alien == totalAlien) {
 				res++;
-				if (score > starScore[1]) {
+				if (score >= starScore[1]) {
 					res++;
-					if (score > starScore[2])
+					if (score >= starScore[2])
 						res++;
 				}
 			}
@@ -56,10 +56,11 @@ public class Niveau implements Serializable {
 	public void jouer(int a, int b) {
 		currentScore += currentPlat.supprimer(a, b, true);
 		currentPlat.tomber();
-		int saved = currentPlat.suppAlien();
-		currentScore += saved*10000;
-		currentPlat.glisser();
-		savedAlien += saved;
+			int saved = currentPlat.suppAlien();
+			currentPlat.tomber();
+			currentScore += saved*1000;
+			currentPlat.glisser();
+			savedAlien += saved;
 		gameState = stars.apply(currentScore, savedAlien);
 		if (gameState == 0 && !currentPlat.jouable())
 			gameState = -1;
