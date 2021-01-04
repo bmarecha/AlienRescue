@@ -6,6 +6,12 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
+
 public class Environnement implements Serializable{
 	private static final long serialVersionUID = 3968155942580492870L;
 	public int maxNiv;
@@ -63,6 +69,13 @@ public class Environnement implements Serializable{
 			return;
 		}
 	}
+
+	
+	public static void play(File f, boolean music) {
+		
+	}
+
+	
 	
 	// Le niveau a été quitté donc le score ou nombre de niveau disponibles ont peut être changer
 	public void niveauFini(boolean gagner) {
