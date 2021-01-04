@@ -147,9 +147,8 @@ public class Ecran extends JFrame{
 			} else {
 				System.out.println("BackgroundImg, bad link.");
 			}
-			JLabel j = new JLabel();
-			j.setBounds(25, 25, 150, 20);
-			j.setSize(150, 20);
+			JLabel j = new JLabel("<html><span>");
+			j.setBounds(25, 25, 150, 600);
 			Scanner scan;
 			try {
 				File f1 = new File("howToPlay.md");
@@ -160,14 +159,14 @@ public class Ecran extends JFrame{
 					String mot=scan.next();
 							
 
-					if(mot.length()+text.length()-text.lastIndexOf("\n")>25) {
-						text+="\n";
+					if(mot.length()+text.length()-text.lastIndexOf(">")>25) {
+						text+="<br>";
 						
 					}
 					text+= mot+" ";	
 
 				}
-				j.setText(text);
+				j.setText(text + "</span></html>");
 				j.setForeground(Color.WHITE);
 				scan.close();
 				System.out.println(j.getText());

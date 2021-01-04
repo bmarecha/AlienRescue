@@ -18,23 +18,20 @@ import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.imageio.ImageIO;
 import javax.swing.*;
-import javax.swing.border.BevelBorder;
-import javax.swing.border.Border;
 import javax.swing.border.LineBorder;
 
 public class AffichageSelect extends JPanel {
 	private static final long serialVersionUID = 1L;
 	Environnement modele;
 	ArrayList<Bouton> niveaux = new ArrayList<>();
-	JButton play, home, save, music, noMusic;
-	boolean noSound= false;
+	JButton play, home, save, music;
+	boolean noSound= true;
 	private Image bgImage = null;
-	String s=null;
+	Clip clip;
 	
 	
 	public AffichageSelect (Environnement e) {
 		modele = e;
-		s="music";
 		this.setLayout(null);//new GridLayout(6, 1));
 		File f = new File("images/Planets.jpg");
 		
@@ -107,59 +104,52 @@ public class AffichageSelect extends JPanel {
 		save.setBounds(530, 0, 70, 70);
 		save.addActionListener((event)-> {modele.save();save.setIcon(new ImageIcon("images/checkmark.png"));save.setEnabled(false);});
 		this.add(save);
-		music = new JButton(s);
+		music = new JButton();
 		music.setContentAreaFilled(false);
 		music.setOpaque(false);
 		music.setBorderPainted(false);
-		music.setBounds(0, 660, 70, 70);
-		music.addActionListener(
-				new ActionListener() {
-
-					public void actionPerformed(ActionEvent e) {
-						File f= new File("/music/soar-noisy_oyster.wav");
-						music.setIcon("images/musicOn.png");
-						s="music";
-
-						if(f.exists()){
-							try {
-								AudioInputStream audioInput= AudioSystem.getAudioInputStream(f);
-								Clip clip = AudioSystem.getClip();
-								if (e.getActionCommand().equals("music")) {
-									clip.open(audioInput);
-									clip.start();
-									clip.loop(Clip.LOOP_CONTINUOUSLY);
-									s="noMusic";
-									music.setIcon("images/musicOn.png");
-								}
-								if (e.getActionCommand().equals("noMusic")) {
-									clip.stop();	
-									s="music";
-									music.setIcon("images/musicOff.png");
-
-
-								}
-							} catch (UnsupportedAudioFileException e1) {
-								// TODO Auto-generated catch block
-								e1.printStackTrace();
-							} catch (LineUnavailableException e1) {
-								// TODO Auto-generated catch block
-								e1.printStackTrace();
-							} catch (IOException e1) {
-								// TODO Auto-generated catch block
-								e1.printStackTrace();
-							}
-
-
-
-						}
-					}
-				});
-		
-		
-		
+		music.setBounds(0, 660, 80, 80);
+		switchMusic();
+		music.addActionListener((event)-> {switchMusic();});
 		this.add(music);
+
 	}
-	
+
+	public void switchMusic() {
+		File f= new File("music/soar-noisy_oyster.wav");
+		if(f.exists()){
+			try {
+				if (clip == null)
+					clip = AudioSystem.getClip();
+				if (noSound) {
+					AudioInputStream audioInput= AudioSystem.getAudioInputStream(f);
+					clip.open(audioInput);
+					clip.start();
+					clip.loop(Clip.LOOP_CONTINUOUSLY);
+					System.out.print("MusicOn");
+					music.setIcon(new ImageIcon("images/musicOn.png"));
+					noSound = false;
+				}
+				else {
+					clip.stop();
+					clip.close();
+					noSound = true;
+					music.setIcon(new ImageIcon("images/musicOff.png"));
+				}
+			} catch (UnsupportedAudioFileException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			} catch (LineUnavailableException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			} else {
+				System.out.println("Music File Not Found");
+			}
+		}
 
 		
 	
