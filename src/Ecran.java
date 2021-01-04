@@ -18,6 +18,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JTextArea;
 
 public class Ecran extends JFrame{
 	private static final long serialVersionUID = 1L;
@@ -147,9 +148,8 @@ public class Ecran extends JFrame{
 			} else {
 				System.out.println("BackgroundImg, bad link.");
 			}
-			JLabel j = new JLabel("<html><span>");
-			j.setBounds(25, 25, 150, 600);
 			Scanner scan;
+			JTextArea j = null;
 			try {
 				File f1 = new File("howToPlay.md");
 				scan = new Scanner(f1);
@@ -157,26 +157,33 @@ public class Ecran extends JFrame{
 				String text = "";
 				while(scan.hasNext()) {
 					String mot=scan.next();
-							
-
-					if(mot.length()+text.length()-text.lastIndexOf(">")>25) {
-						text+="<br>";
-						
+					if(mot.length()+text.length()-text.lastIndexOf("\n")>25) {
+						text+="\n";	
 					}
 					text+= mot+" ";	
 
 				}
-				j.setText(text + "</span></html>");
-				j.setForeground(Color.WHITE);
+				j = new JTextArea(text);
+				j.setEditable(false);
+				j.setOpaque(false);
+				j.setFont(new Font("Arial", Font.BOLD, 40));
+				j.setForeground(Color.white);
+				j.setBounds(30, 0, 150, 600);
 				scan.close();
 				System.out.println(j.getText());
 			} catch (FileNotFoundException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			
-			
 			this.add(j);
+			JButton home = new JButton();
+			home.setContentAreaFilled(false);
+			home.setOpaque(false);
+			home.setBorderPainted(false);
+			home.setIcon(new ImageIcon("images/home.png"));
+			home.setBounds(300, 600, 70, 70);
+			home.addActionListener((event)-> menu());
+			this.add(home);
 		}
 		@Override
 		protected void paintComponent(Graphics g) {
