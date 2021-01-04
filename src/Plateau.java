@@ -1,21 +1,44 @@
+import java.io.Serializable;
 
-public class Plateau {
+public class Plateau implements Serializable, Cloneable{
+	private static final long serialVersionUID = 1L;
 	Case[][] grid;
 	int hauteur;
 	int largeur;
+	/*
 	Case rouge = new Case(false, 1);
 	Case vert = new Case(false, 2);
 	Case bleu = new Case(false, 3);
 	Case vide= new Case(false,0);
 	Case[] normal= {rouge, vert, bleu};
-
+	*/
 
 	public Plateau (int h, int l) {
 		hauteur=h;
 		largeur=l;
 		grid = new Case[hauteur][largeur];
-
-		String s = "arrrvx"+"rrbbvv"+"vvbbbr"+"bbbrrv"+"vvrrbb"+"bvvvrr";
+		String s=
+				"arrxxx" +
+				"rrbbrx" +
+				"vvbarr"+
+				"bbbvvv"+
+				"vvrrbb"+
+				"brvvrr";
+/*
+		s =		"xxxxxx" +
+				"xxaxxr" +
+				"bvrbvr"+
+				"vrbvrb"+
+				"bvrbvr"+
+				"vrbvrb";
+				*//*
+		s =		"arrrxx" +
+				"brbbxb" +
+				"vvbaxr"+
+				"rbbvrv"+
+				"vrrrbb"+
+				"bvvvrr";
+				//*/
 		for(int i=0; i<hauteur; i++) {
 			for(int j=0; j<largeur; j++) {
 				switch(s.charAt((i*6 + j)% s.length())){
@@ -40,36 +63,39 @@ public class Plateau {
 			}
 		}
 	}
-	boolean first;
-	boolean neighbour;
 	
-	public void supprimer(int a, int b, boolean first) {
+	public Plateau clone() throws CloneNotSupportedException {
+		Plateau copy = (Plateau)super.clone();
+		copy.grid = this.grid.clone();
+		return copy;
+		
+	}
+	
+	public int supprimer(int a, int b, boolean first) {
+		boolean neighbour=false;
+		int res = 0;
 		int color = grid[a][b].k;
 		grid[a][b].checked= true;
-		neighbour=false;
+		System.out.println("checked " + a + " " + b);
 
 		for (int i=-1; i<=1; i++) {
 			if(a-i>=0 && a-i<this.hauteur && i!=0 && !grid[a-i][b].checked && grid[a-i][b].k== color) {
-				supprimer(a-i, b, false);
+				res += supprimer(a-i, b, false);
 				neighbour=true;
-				
 			}
 		}
 		for (int i=-1; i<=1; i++) {
 			if(b-i>=0 && b-i<this.largeur && i!=0 && !grid[a][b-i].checked && grid[a][b-i].k== color) {
-				supprimer(a, b-i, false);
+				res += supprimer(a, b-i, false);
 				neighbour=true;
-
 			}
 		}
-		if(!first || neighbour) {		
+		if(!first || neighbour) {
 			grid[a][b].k=0;
-			System.out.println(a+" "+b);
-			if(first) {
-				tomber();
-				glisser();
-			}
+			res+= 100;
+			System.out.println("supp " + a + " " + b + "n°" + res);
 		}
+		return res;
 	}
 	
 	public void tomber() {
@@ -94,6 +120,16 @@ public class Plateau {
 		}
 	}
 	
+	public int suppAlien() {
+		int res = 0;
+		for (Case c : grid[this.hauteur - 1])
+			if (c.k == 4) {
+				c.supp();
+				res++;
+			}
+		return res;
+	}
+	
 	public void glisser() {
 		for (int j = 0; j <=this.largeur - 2; j++) {
 			int i = this.hauteur - 1;
@@ -110,12 +146,22 @@ public class Plateau {
 			}
 		}
 	}
+
+	public boolean jouable() {
+		for (int a = 0; a <this.hauteur; a++)
+			for (int b = 0; b < this.largeur ; b++) {
+				int color = grid[a][b].k;
+				if (color != 0 && color != 4) {
+					if (a-1>=0 && grid[a-1][b].k== color)
+						return true;
+					if (a+1<this.hauteur && grid[a+1][b].k== color)
+						return true;
+					if (b-1>=0 && grid[a][b-1].k== color)
+						return true;
+					if (b+1<this.largeur && grid[a][b+1].k== color)
+						return true;
+				}
+			}
+		return false;
+	}
 }
-/*
-o
-o
-x
-x
-o
-o
-*/

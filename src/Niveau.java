@@ -1,22 +1,87 @@
 import java.io.Serializable;
+import java.util.function.BiFunction;
 
 public class Niveau implements Serializable {
-	private static final long serialVersionUID = 6756182802449785285L;
-	public final int num;
+	private static final long serialVersionUID = 1L;
 	public transient Environnement envi;
+	
+	//Constantes à sauvegarder
+	public final int num;
 	public final Plateau startPlateau;
+	public final int totalAlien;
+	public final int totalCase;
+	public final BiFunction<Integer, Integer, Integer> stars;
+	public final int[] starScore = {2000, 4000, 5000};
+	
+	//Variables propre à la partie en cours
 	public transient Plateau currentPlat;
+	public transient int savedAlien;
+	public transient int currentScore;
+	public transient int gameState;
 	
 	// n'hésite pas à rajouter des choses au constructeur
 	public Niveau(int i) {
 		num = i;
 		startPlateau = new Plateau(6, 6); 
-		currentPlat =  new Plateau(6, 6);
+		totalAlien = countAlien(startPlateau);
+		totalCase = countCase(startPlateau);
+		stars = ((score, alien) -> {
+			int res = 0;
+			if (score >= starScore[0] && alien == totalAlien) {
+				res++;
+				if (score >= starScore[1]) {
+					res++;
+					if (score >= starScore[2])
+						res++;
+				}
+			}
+			return res;
+		});
 	}
 	
-	
-	public void setEnvironnement(Environnement e) {
+	public void initTransients(Environnement e) {
 		envi = e;
+		try {
+			currentPlat =  startPlateau.clone();
+		} catch (CloneNotSupportedException e1) {
+			currentPlat =  new Plateau(6, 6);
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		savedAlien = 0;
+		currentScore = 0;
+		gameState = 1;
+	}
+
+	public void jouer(int a, int b) {
+		currentScore += currentPlat.supprimer(a, b, true);
+		currentPlat.tomber();
+			int saved = currentPlat.suppAlien();
+			currentPlat.tomber();
+			currentScore += saved*1000;
+			currentPlat.glisser();
+			savedAlien += saved;
+		gameState = stars.apply(currentScore, savedAlien);
+		if (gameState == 0 && !currentPlat.jouable())
+			gameState = -1;
+	}
+	
+	public int countAlien(Plateau p) {
+		int res = 0;
+		for (Case[] ligne : p.grid)
+			for (Case c : ligne)
+				if (c.isAlien)
+					res++;
+		return res;
+	}
+	
+	public int countCase(Plateau p) {
+		int res = 0;
+		for (Case[] ligne : p.grid)
+			for (Case c : ligne)
+				if (c.k == 1 || c.k == 2 || c.k == 3)
+					res++;
+		return res;
 	}
 	
 	// à appeler quand le niveau est fini et qu'on veux envoyer des informations
@@ -24,6 +89,6 @@ public class Niveau implements Serializable {
 	// mais n'oublie pas non plus que les informations de niveau se trouvent dans l'environnement
 	// dans le Niveau current
 	public void retour() {
-		this.envi.niveauFini();
+		this.envi.niveauFini(savedAlien == totalAlien);
 	}
 }
