@@ -149,7 +149,7 @@ public class Ecran extends JFrame{
 			if (f.exists()) {
 				try {
 					bgImage = ImageIO.read(f);
-					bgImage = new ImageIcon("images/Planets.jpg").getImage();
+					bgImage = new ImageIcon("images/ufo-600900.jpg").getImage();
 					System.out.println("Supposed to be painted...");
 				} catch (IOException except) {
 					except.printStackTrace();
