@@ -16,7 +16,9 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+
 import javax.swing.JOptionPane;
+
 import javax.swing.JPanel;
 
 public class Ecran extends JFrame{
@@ -50,6 +52,7 @@ public class Ecran extends JFrame{
 		this.setVisible(true);
 	}
 
+
 	public void menu() {
 		if (menu == null)
 			menu = new HomeMenu();
@@ -74,11 +77,11 @@ public class Ecran extends JFrame{
 
 		public HomeMenu() {
 			this.setLayout(null);//new GridLayout(6, 1));
-			File f = new File("images/Planets.jpg");
+			File f = new File("images/ufo-600900.jpg");
 			if (f.exists()) {
 				try {
 					bgImage = ImageIO.read(f);
-					bgImage = new ImageIcon("images/Planets.jpg").getImage();
+					//bgImage = new ImageIcon("images/ufo-600900.jpg").getImage();
 					System.out.println("Supposed to be painted...");
 				} catch (IOException except) {
 					except.printStackTrace();
@@ -86,11 +89,17 @@ public class Ecran extends JFrame{
 			} else {
 				System.out.println("BackgroundImg, bad link.");
 			}
+			JLabel name = new JLabel("Alien Rescue");
+			name.setFont(new Font("Arial", Font.BOLD, 60));
+			name.setForeground(Color.WHITE);
+			name.setBackground(Color.BLACK);
+			name.setBounds(70, 355, 440, 70);
+			this.add(name);
 			JButton play = new JButton();
 			play.setOpaque(false);
 			play.setContentAreaFilled(false);
 			play.setIcon(new ImageIcon("images/right.png"));
-			play.setBounds(270, 350, 70, 70);
+			play.setBounds(255, 440, 70, 70);
 			play.setBorderPainted(false);
 			play.addActionListener((event) -> select());
 			this.add(play);
