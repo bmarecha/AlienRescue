@@ -1,5 +1,4 @@
-import java.awt.BasicStroke;
-import java.awt.BorderLayout;
+
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Font;
@@ -7,24 +6,16 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.GridLayout;
 import java.awt.Image;
-import java.awt.RenderingHints;
 import java.io.File;
 import java.io.IOException;
-import java.util.Dictionary;
-import java.util.HashMap;
-import java.util.Hashtable;
 
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
-import javax.swing.JSlider;
-import javax.swing.Painter;
 import javax.swing.SwingConstants;
-import javax.swing.UIDefaults;
 
 public class AffichageNiv extends JPanel {
 	private static final long serialVersionUID = 1L;
@@ -37,15 +28,16 @@ public class AffichageNiv extends JPanel {
 	ImageIcon aster1 = new ImageIcon("images/asteroid2.png");
 	ImageIcon aster3 = new ImageIcon("images/asteroid3.png");
 	ImageIcon alien = new ImageIcon("images/alien2.png");
+	ImageIcon star1 = new ImageIcon("images/star1.png");
+	JLabel[] labels;
 
 	public AffichageNiv (Niveau n) {
 		this.setLayout(null);//new BorderLayout());
 		modele = n;
+		int height = n.envi.screen.height;
+		int width = n.envi.screen.width;
 
 		// Affichage des informations du niveau
-		JPanel hud = new JPanel();
-		hud.setLayout(null);
-		hud.setOpaque(false);
 		JButton exit = new JButton(new ImageIcon("images/return.png"));
 		exit.addActionListener((event) -> modele.retour());
 		exit.setBounds(0, 0, 60, 60);
@@ -55,27 +47,29 @@ public class AffichageNiv extends JPanel {
 		this.add(exit);
 		score = new JLabel("0", SwingConstants.RIGHT);
 		score.setFont(new Font("Arial", Font.BOLD, 30));
-		score.setBounds(60, 10, 120, 50);
+		score.setBounds(60, 10, 100, 50);
 		this.add(score);
 		goal = new JProgressBar(0, modele.totalAlien*10 + modele.totalCase);
-		Dictionary<Integer, JLabel> labels = new Hashtable<>();
-		for (int star : modele.starScore)
-			labels.put(star / 100, new JLabel(new ImageIcon("images/star.png")));
 		goal.setOpaque(false);
-		goal.setBounds(190, 10, 300, 50);
+		goal.setBounds(170, 10, width/2, 50);
+		labels = new JLabel[modele.starScore.length];
+		for (int i = 0; i < modele.starScore.length; i++) {
+			labels[i] = new JLabel(star1);
+			labels[i].setBounds(140 + (width/2 * modele.starScore[i]) / (goal.getMaximum() * 100 ), 10, 50, 50);
+			labels[i].setOpaque(false);
+			this.add(labels[i]);
+			System.out.println("add star : "+labels[i]+i);
+		}
 		this.add(goal);
 		aliens = new JLabel("0/" + modele.totalAlien, alien, SwingConstants.RIGHT);
 		aliens.setFont(new Font("Arial", Font.BOLD, 30));
-		aliens.setBounds(490, 10, 100, 60);
+		aliens.setBounds(width-100, 10, 100, 60);
 		this.add(aliens);
 		victory = new JLabel();
 		victory.setFont(new Font("Arial", Font.BOLD, 40));
 		victory.setForeground(Color.WHITE);
-//		victory.setBackground(Color.BLACK);
 		victory.setBounds(0, 150, 550, 80);
 		this.add(victory);
-		hud.setBounds(0, 0, 600, 90);
-		//this.add(hud);
 		File f;
 		switch (modele.num) {
 		case 1:
@@ -116,12 +110,11 @@ public class AffichageNiv extends JPanel {
 				bouton.setContentAreaFilled(false);
 				bouton.setOpaque(false);
 				bouton.setIcon(null);
-				//à changer selon la case i j du plateau (setIcon, addActionListener(modele.jouer(i, j))
 				bouton.addActionListener((event) -> {modele.jouer(bouton.x, bouton.y);actualiser();});
 				affichagePlateau.add(bouton);
 
 			}
-		affichagePlateau.setBounds(0, 50, 600, 700);
+		affichagePlateau.setBounds(0, 80, width, height - 180);
 		this.add(affichagePlateau);
 		this.refreshPlat();
 	}
@@ -133,6 +126,18 @@ public class AffichageNiv extends JPanel {
 		score.setText(Integer.toString(modele.currentScore));
 		aliens.setText(modele.savedAlien + "/" + modele.totalAlien);
 		goal.setValue(modele.currentScore/100);
+		Color bar;
+		if (modele.currentScore >= modele.starScore[0])
+			if (modele.currentScore >= modele.starScore[1])
+				if (modele.currentScore >= modele.starScore[2])
+					bar = Color.GREEN;
+				else
+					bar = Color.YELLOW;
+			else 
+				bar = Color.ORANGE;
+		else
+			bar = Color.RED;
+		goal.setForeground(bar);
 		if (modele.gameState != 0) {
 			if (modele.gameState == -1)
 				victory.setText("Vous avez perdu !");

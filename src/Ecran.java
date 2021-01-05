@@ -2,10 +2,9 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.GraphicsEnvironment;
 import java.awt.Image;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.image.BufferedImage;
+import java.awt.Rectangle;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -16,9 +15,6 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-
-import javax.swing.JOptionPane;
-
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 
@@ -28,6 +24,8 @@ public class Ecran extends JFrame{
 	AffichageSelect selection= null;
 	HomeMenu menu = null;
 	HelpPage help= null;
+	public int width = 600;
+	public int height = 900;
 
 	
 	
@@ -37,7 +35,16 @@ public class Ecran extends JFrame{
 		this.setTitle("AlienRescue");
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 		envi = e;
-		this.setSize(600, 900);
+		Rectangle tailleEnvi = GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds();
+		if (HEIGHT > tailleEnvi.height)
+			if (tailleEnvi.height >= 600) {
+				height = tailleEnvi.height;
+				width = tailleEnvi.height * 2 / 3;
+			} else {
+				height = 600;
+				width = 400;
+			}
+		this.setSize(width, height);
 		envi.setScreen(this);
 		menu();
 	
@@ -110,7 +117,7 @@ public class Ecran extends JFrame{
 			aide.setOpaque(false);
 			aide.setContentAreaFilled(false);
 			aide.setIcon(new ImageIcon("images/question.png"));
-			aide.setBounds(0, 650, 70, 70);
+			aide.setBounds(0, height - 120, 70, 70);
 			aide.setBorderPainted(false);
 			aide.addActionListener((event) -> help());
 
@@ -177,7 +184,7 @@ public class Ecran extends JFrame{
 				j.setOpaque(false);
 				j.setFont(new Font("Arial", Font.BOLD, 40));
 				j.setForeground(Color.white);
-				j.setBounds(30, 0, 150, 600);
+				j.setBounds(30, 0, 150, height - 150);
 				scan.close();
 				System.out.println(j.getText());
 			} catch (FileNotFoundException e) {
@@ -190,7 +197,7 @@ public class Ecran extends JFrame{
 			home.setOpaque(false);
 			home.setBorderPainted(false);
 			home.setIcon(new ImageIcon("images/home.png"));
-			home.setBounds(300, 600, 70, 70);
+			home.setBounds(300, height - 140, 70, 70);
 			home.addActionListener((event)-> menu());
 			this.add(home);
 		}
