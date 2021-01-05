@@ -76,7 +76,6 @@ public class Plateau implements Serializable, Cloneable{
 		int res = 0;
 		int color = grid[a][b].k;
 		grid[a][b].checked= true;
-		System.out.println("checked " + a + " " + b);
 
 		for (int i=-1; i<=1; i++) {
 			if(a-i>=0 && a-i<this.hauteur && i!=0 && !grid[a-i][b].checked && grid[a-i][b].k== color) {

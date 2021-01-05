@@ -16,8 +16,8 @@ public class Environnement implements Serializable{
 	private static final long serialVersionUID = 3968155942580492870L;
 	public int maxNiv;
 	public int cursorNiv;
-	public transient Niveau current;
-	 transient Ecran screen;
+	transient Niveau current;
+	transient Ecran screen;
 	//
 
 	public Environnement () {
