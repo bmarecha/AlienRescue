@@ -2,59 +2,70 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.GridLayout;
 import java.awt.Image;
-import java.awt.Toolkit;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.imageio.ImageIO;
 import javax.swing.*;
-import javax.swing.border.BevelBorder;
-import javax.swing.border.Border;
 import javax.swing.border.LineBorder;
 
 public class AffichageSelect extends JPanel {
 	private static final long serialVersionUID = 1L;
 	Environnement modele;
 	ArrayList<Bouton> niveaux = new ArrayList<>();
-	JButton play, home, save;
+	JButton play, home, save, music;
+	boolean noSound= true;
 	private Image bgImage = null;
+
 	ImageIcon la = new ImageIcon("images/LaunchPad.png");
 	ImageIcon ship = new ImageIcon("images/Ship.png");
 	ImageIcon shipland = new ImageIcon("images/ShipLand.png");
-	
+
+	Clip clip;
+  
 	public AffichageSelect (Environnement e) {
 		modele = e;
-		this.setLayout(null);//new GridLayout(6, 1));
+		int height = e.screen.height;
+		int width = e.screen.width;
+		this.setLayout(null);
 		File f = new File("images/Planets.jpg");
 		if (f.exists()) {
 			try {
 				bgImage = ImageIO.read(f);
 				bgImage = new ImageIcon("images/Planets.jpg").getImage();
+				
+				
 				System.out.println("Supposed to be painted...");
 			} catch (IOException except) {
 				except.printStackTrace();
 			}
-		} else {
+			
+		}
+		else{
+		
 			System.out.println("BackgroundImg, bad link.");
 		}
+		
 		for (int i = 1; i < 6; i++)
 		{
-			int x =  240;
-			int y =  i * (900 / 6) - 130;
+			int x =  (width - 70) / 2;
+			int y =  i * (height / 6) - 110;
 			Bouton niv = new Bouton(i);
 			niv.setOpaque(false);
 			niv.setContentAreaFilled(false);
-			niv.setFont(new Font("Arial", Font.BOLD, 60));
-			niv.setBounds(x, y, 100, 100);
+			niv.setFont(new Font("Arial", Font.BOLD, 50));
+			niv.setBounds(x, y, 70, 70);
 			if ( i > e.maxNiv) {
 				niv.setEnabled(false);
 				niv.setIcon(la);
-				niv.setDisabledIcon(la);
-				
+				niv.setDisabledIcon(la);	
 			}
 			if (i == e.cursorNiv) {
 				niv.setEnabled(false);
@@ -70,13 +81,8 @@ public class AffichageSelect extends JPanel {
 		play.setOpaque(false);
 		play.setContentAreaFilled(false);
 		play.setFont(new Font("Arial", Font.BOLD, 40));
-		play.setBounds(80, 700, 480, 50);
+		play.setBounds(80, height - 90, 480, 50);
 		play.setBorderPainted(false);
-		Image g = null;
-		if (g != null)
-			play.setIcon(new ImageIcon(g));
-		else
-			play.setBackground(Color.cyan);
 		play.addActionListener((event) -> modele.chargerNiveau());
 		this.add(play);
 		home = new JButton();
@@ -92,11 +98,57 @@ public class AffichageSelect extends JPanel {
 		save.setOpaque(false);
 		save.setBorderPainted(false);
 		save.setIcon(new ImageIcon("images/save.png"));
-		save.setBounds(530, 0, 70, 70);
+		save.setBounds(width - 70, 0, 70, 70);
 		save.addActionListener((event)-> {modele.save();save.setIcon(new ImageIcon("images/checkmark.png"));save.setEnabled(false);});
 		this.add(save);
-		
+		music = new JButton();
+		music.setContentAreaFilled(false);
+		music.setOpaque(false);
+		music.setBorderPainted(false);
+		music.setBounds(0, height - 120, 80, 80);
+		switchMusic();
+		music.addActionListener((event)-> {switchMusic();});
+		this.add(music);
+
 	}
+
+	public void switchMusic() {
+		File f= new File("music/soar-noisy_oyster.wav");
+		if(f.exists()){
+			try {
+				if (clip == null)
+					clip = AudioSystem.getClip();
+				if (noSound) {
+					AudioInputStream audioInput= AudioSystem.getAudioInputStream(f);
+					clip.open(audioInput);
+					clip.start();
+					clip.loop(Clip.LOOP_CONTINUOUSLY);
+					System.out.print("MusicOn");
+					music.setIcon(new ImageIcon("images/musicOn.png"));
+					noSound = false;
+				}
+				else {
+					clip.stop();
+					clip.close();
+					noSound = true;
+					music.setIcon(new ImageIcon("images/musicOff.png"));
+				}
+			} catch (UnsupportedAudioFileException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			} catch (LineUnavailableException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			} else {
+				System.out.println("Music File Not Found");
+			}
+		}
+
+		
 	
 	@Override
 	  protected void paintComponent(Graphics g) {

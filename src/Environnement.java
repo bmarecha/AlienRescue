@@ -6,12 +6,18 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
+
 public class Environnement implements Serializable{
 	private static final long serialVersionUID = 3968155942580492870L;
 	public int maxNiv;
 	public int cursorNiv;
-	public transient Niveau current;
-	 transient Ecran screen;
+	transient Niveau current;
+	transient Ecran screen;
 	//
 
 	public Environnement () {
@@ -33,7 +39,7 @@ public class Environnement implements Serializable{
 				ObjectInputStream ois = new ObjectInputStream(new FileInputStream(niveau));
 				current = (Niveau)ois.readObject();
 				ois.close();
-				current.setEnvironnement(this);
+				current.initTransients(this);
 				AffichageNiv panelNiv= new AffichageNiv(current);
 				this.screen.setContentPane(panelNiv);
 			} catch (IOException e) {
@@ -44,7 +50,7 @@ public class Environnement implements Serializable{
 		} else { // Tant qu'on a pas de fichier sauvegardés pour les niveaux
 			System.out.println("Fichier pas encore créé. Chargement du niveau par défaut.");
 			current = new Niveau(cursorNiv);
-			current.setEnvironnement(this);
+			current.initTransients(this);
 			AffichageNiv panelNiv= new AffichageNiv(current);
 			this.screen.setContentPane(panelNiv);
 			this.screen.setVisible(true);
@@ -63,10 +69,17 @@ public class Environnement implements Serializable{
 			return;
 		}
 	}
+
+	
+	public static void play(File f, boolean music) {
+		
+	}
+
+	
 	
 	// Le niveau a été quitté donc le score ou nombre de niveau disponibles ont peut être changer
-	public void niveauFini() {
-		if (this.cursorNiv == maxNiv)
+	public void niveauFini(boolean gagner) {
+		if (this.cursorNiv == maxNiv && gagner)
 			maxNiv++;
 		this.screen.select();
 	}

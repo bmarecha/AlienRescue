@@ -1,6 +1,7 @@
-import java.awt.BorderLayout;
+
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.GridLayout;
@@ -11,27 +12,66 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JProgressBar;
+import javax.swing.SwingConstants;
 
 public class AffichageNiv extends JPanel {
 	private static final long serialVersionUID = 1L;
 	Niveau modele;
+	JLabel score, aliens, victory, anim;
+	JProgressBar goal;
 	JPanel affichagePlateau;
 	private Image bgImage = null;
 	ImageIcon aster2 = new ImageIcon("images/asteroid1.png");
 	ImageIcon aster1 = new ImageIcon("images/asteroid2.png");
 	ImageIcon aster3 = new ImageIcon("images/asteroid3.png");
 	ImageIcon alien = new ImageIcon("images/alien2.png");
+	ImageIcon star1 = new ImageIcon("images/star1.png");
+	JLabel[] labels;
 
 	public AffichageNiv (Niveau n) {
-		this.setLayout(new BorderLayout());
+		this.setLayout(null);//new BorderLayout());
+		modele = n;
+		int height = n.envi.screen.height;
+		int width = n.envi.screen.width;
 
 		// Affichage des informations du niveau
-		modele = n;
-		JButton exit = new JButton();
+		JButton exit = new JButton(new ImageIcon("images/return.png"));
 		exit.addActionListener((event) -> modele.retour());
-		exit.setText("Quitter le niveau " + modele.num);
-		this.add(exit, BorderLayout.SOUTH);
+		exit.setBounds(0, 0, 50, 60);
+		exit.setOpaque(false);
+		exit.setContentAreaFilled(false);
+		exit.setBorderPainted(false);
+		this.add(exit);
+		anim = new JLabel();
+		this.add(anim);
+		score = new JLabel("0", SwingConstants.RIGHT);
+		score.setFont(new Font("Arial", Font.BOLD, 30));
+		score.setBounds(50, 10, 100, 50);
+		this.add(score);
+		aliens = new JLabel("0/" + modele.totalAlien, alien, SwingConstants.RIGHT);
+		aliens.setFont(new Font("Arial", Font.BOLD, 30));
+		aliens.setBounds(width-100, 10, 100, 60);
+		this.add(aliens);
+		goal = new JProgressBar(0, modele.totalAlien*10 + modele.totalCase);
+		goal.setOpaque(false);
+		goal.setBounds(160, 10, width/2, 50);
+		labels = new JLabel[modele.starScore.length];
+		for (int i = 0; i < modele.starScore.length; i++) {
+			labels[i] = new JLabel(star1);
+			labels[i].setBounds(130 + (width/2 * modele.starScore[i]) / (goal.getMaximum() * 100 ), 10, 50, 50);
+			labels[i].setOpaque(false);
+			this.add(labels[i]);
+			System.out.println("add star : "+labels[i]+i);
+		}
+		this.add(goal);
+		victory = new JLabel();
+		victory.setFont(new Font("Arial", Font.BOLD, 40));
+		victory.setForeground(Color.WHITE);
+		victory.setBounds(0, 150, 550, 80);
+		this.add(victory);
 		File f;
 		switch (modele.num) {
 		case 1:
@@ -72,47 +112,44 @@ public class AffichageNiv extends JPanel {
 				bouton.setContentAreaFilled(false);
 				bouton.setOpaque(false);
 				bouton.setIcon(null);
-				//à changer selon la case i j du plateau (setIcon, addActionListener(modele.jouer(i, j))
-				Case current= modele.currentPlat.grid[i][j];
-				switch(current.k) {
-				case 0:
-					bouton.setEnabled(false);
-					break;
-				case 1:
-					bouton.setIcon(aster1);
-					bouton.addActionListener((event) -> {modele.currentPlat.supprimer(bouton.x, bouton.y, true);
-					actualiser();});
-					break;
-				case 2:
-					bouton.setIcon(aster2);
-					bouton.addActionListener((event) -> {modele.currentPlat.supprimer(bouton.x, bouton.y, true);
-					actualiser();});
-					break;
-				case 3:
-					bouton.setIcon(aster3);
-					bouton.addActionListener((event) -> {modele.currentPlat.supprimer(bouton.x, bouton.y, true);
-
-					actualiser();});
-					break;
-				case 4:
-					bouton.setIcon(alien);
-					bouton.setDisabledIcon(alien);
-					bouton.addActionListener((event) -> {modele.currentPlat.supprimer(bouton.x, bouton.y, true);
-					actualiser();});
-					break;
-
-				}
+				bouton.addActionListener((event) -> {modele.jouer(bouton.x, bouton.y);actualiser();});
 				affichagePlateau.add(bouton);
 
 			}
-		this.add(affichagePlateau, BorderLayout.CENTER);
-
-		
-
+		affichagePlateau.setBounds(0, 80, width, height - 180);
+		this.add(affichagePlateau);
+		this.refreshPlat();
 	}
+	
 	public void actualiser(){
+		//Actualisation du Plateau
+		refreshPlat();
+		//Divers
+		score.setText(Integer.toString(modele.currentScore));
+		aliens.setText(modele.savedAlien + "/" + modele.totalAlien);
+		goal.setValue(modele.currentScore/100);
+		Color bar;
+		if (modele.currentScore >= modele.starScore[0])
+			if (modele.currentScore >= modele.starScore[1])
+				if (modele.currentScore >= modele.starScore[2])
+					bar = Color.GREEN;
+				else
+					bar = Color.YELLOW;
+			else 
+				bar = Color.ORANGE;
+		else
+			bar = Color.RED;
+		goal.setForeground(bar);
+		if (modele.gameState != 0) {
+			if (modele.gameState == -1)
+				victory.setText("Vous avez perdu !");
+			else
+				victory.setText("Vous avez gagné ! " + modele.gameState + "*");
+		}
+	}
+	
+	public void refreshPlat() {
 		Component [] component = affichagePlateau.getComponents();
-		//if !alien
 		Plateau plato = modele.currentPlat;
 		for (int i=0; i<component.length; i++) {
 			Bouton bouton = (Bouton)component[i];
@@ -123,12 +160,15 @@ public class AffichageNiv extends JPanel {
 				bouton.setDisabledIcon(null);
 				break;
 			case 1:
+				bouton.setEnabled(true);
 				bouton.setIcon(aster1);
 				break;
 			case 2:
+				bouton.setEnabled(true);
 				bouton.setIcon(aster2);
 				break;
 			case 3:
+				bouton.setEnabled(true);
 				bouton.setIcon(aster3);
 				break;
 			case 4:
@@ -142,7 +182,7 @@ public class AffichageNiv extends JPanel {
 		}
 	}
 	
-
+	
 	@Override
 	  protected void paintComponent(Graphics g) {
 	    super.paintComponent(g);
@@ -154,6 +194,32 @@ public class AffichageNiv extends JPanel {
 	    else
 	    	System.out.println("no backgroundimage");
 	}
+	/*
+	public void animation(String directory, int x, int y) {
+		File f = new File("images/" + directory);
+		if (!f.exists() || !f.isDirectory())
+			return;
+		anim.setBounds(x, y, 200, 200);
+		int i = 1;
+		String path = "images/" + directory + "/" + directory + "1.png";
+		f = new File(path);
+		while (f.exists())
+		{
+			anim.setIcon(new ImageIcon(path));
+			try {
+				System.out.println(anim);
+				anim.updateUI();
+				Thread.sleep(10);
+				
+			} catch (InterruptedException e) {
+		        e.printStackTrace();
+			}
+			i++;
+			path = "images/" + directory + "/" + directory + Integer.toString(i)+ ".png";
+			f = new File(path);
+		}
+		anim.setIcon(null);
+	}*/
 	
 	private class Bouton extends JButton {
 		private static final long serialVersionUID = 1L;
