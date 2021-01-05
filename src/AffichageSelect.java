@@ -60,6 +60,7 @@ public class AffichageSelect extends JPanel {
 			Bouton niv = new Bouton(i);
 			niv.setOpaque(false);
 			niv.setContentAreaFilled(false);
+			niv.setBorderPainted(false);
 			niv.setFont(new Font("Arial", Font.BOLD, 50));
 			niv.setBounds(x, y, 70, 70);
 			if ( i > e.maxNiv) {
