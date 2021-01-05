@@ -8,6 +8,8 @@ import java.awt.GridLayout;
 import java.awt.Image;
 import java.io.File;
 import java.io.IOException;
+import java.util.Dictionary;
+import java.util.LinkedList;
 
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
@@ -28,6 +30,7 @@ public class AffichageNiv extends JPanel {
 	ImageIcon aster1 = new ImageIcon("images/asteroid2.png");
 	ImageIcon aster3 = new ImageIcon("images/asteroid3.png");
 	ImageIcon alien = new ImageIcon("images/alien2.png");
+	LinkedList<JButton> powers = new LinkedList<>();
 	ImageIcon star1 = new ImageIcon("images/star1.png");
 	JLabel[] labels;
 
@@ -101,8 +104,8 @@ public class AffichageNiv extends JPanel {
 
 		//Affichage du plateau central
 		affichagePlateau = new JPanel();
-		int hauteur = 6; //à remplacer avec les valeurs de plateau
-		int largeur = 6;
+		int hauteur = n.currentPlat.hauteur; //à remplacer avec les valeurs de plateau
+		int largeur = n.currentPlat.largeur;
 		affichagePlateau.setLayout(new GridLayout(hauteur, largeur));
 		affichagePlateau.setOpaque(false);
 		for (int i = 0; i < hauteur; i++) 
@@ -118,7 +121,44 @@ public class AffichageNiv extends JPanel {
 			}
 		affichagePlateau.setBounds(0, 80, width, height - 180);
 		this.add(affichagePlateau);
+		
+		//affichage des pouvoirs
+		if (n.acid > 0) {
+			JButton acid = new JButton("Arme Biochimique");
+			acid.addActionListener((event) -> choosePower(0));
+			powers.add(acid);
+		}if (n.laser > 0) {
+			JButton laser = new JButton("Laser linéaire");
+			laser.addActionListener((event) -> choosePower(1));
+			powers.add(laser);
+		}
+		for (int i = 0; i < powers.size(); i++) {
+			JButton b = powers.get(i);
+			b.setBounds(40 + width * i / powers.size() ,height - 100, (width - 100 )/ powers.size(), 50);
+			b.setFont(new Font("Arial", Font.BOLD, 30));
+			b.setBackground(Color.GRAY);
+			b.setForeground(Color.white);
+			b.setEnabled(true);
+			this.add(b);
+			System.out.println(b);
+		}
 		this.refreshPlat();
+	}
+	
+	public void choosePower(int p) {
+		JButton activated = powers.get(p);
+		for (int i = 0; i < powers.size(); i++)
+			powers.get(i).setBackground(Color.GRAY);
+		activated.setBackground(Color.GREEN);
+		modele.acidG = false;
+		modele.laserS = false;
+		switch (p) {
+		case 0 :
+			modele.chooseAcid();
+		case 1 :
+			modele.chooseLaser();
+		}
+		
 	}
 	
 	public void actualiser(){

@@ -57,6 +57,8 @@ public class Plateau implements Serializable, Cloneable{
 				case 'a':
 					grid[i][j] = new Case (true, 4);					
 					break;
+				case 'm':
+					grid[i][j] = new Case (false, 5);
 				default:
 					break;
 				}
@@ -117,6 +119,29 @@ public class Plateau implements Serializable, Cloneable{
 				}
 			}
 		}
+	}
+	
+	public int suppLigne(int a) {
+		int res = 0;
+		for (Case c : grid[a])
+		{
+			if (c.k != 0 && c.k != 4)
+				res += 100;
+			c.supp();
+		}
+		return res;
+	}
+	public int suppZone(int a, int b, int radius) {
+		int res = 0;
+		for (int i= -radius; i<=radius; i++) {
+			for (int j= -radius; j<=radius; j++) {
+			if(a+i>=0 && a+i<this.hauteur && b+j>=0 && b+j<this.largeur) {
+				grid[a+i][b+j].supp();
+				res += 100;
+			}
+			}
+		}
+		return res;
 	}
 	
 	public int suppAlien() {
