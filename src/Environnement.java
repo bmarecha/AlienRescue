@@ -58,7 +58,7 @@ public class Environnement implements Serializable{
 	}
 	
 	public void save() {
-		File save = new File("Firstsave.ser");
+		File save = new File("ser/Environ.ser");
 		ObjectOutputStream oos;
 		try {
 			oos = new ObjectOutputStream(new FileOutputStream(save));

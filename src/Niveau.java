@@ -12,12 +12,16 @@ public class Niveau implements Serializable {
 	public final int totalCase;
 	public final BiFunction<Integer, Integer, Integer> stars;
 	public final int[] starScore = {2000, 4000, 5000};
+	public int laser;
+	public int acid;
 	
 	//Variables propre à la partie en cours
 	public transient Plateau currentPlat;
 	public transient int savedAlien;
 	public transient int currentScore;
 	public transient int gameState;
+	public transient boolean laserS = false;
+	public transient boolean acidG = false;
 	
 	// n'hésite pas à rajouter des choses au constructeur
 	public Niveau(int i) {
@@ -37,6 +41,10 @@ public class Niveau implements Serializable {
 			}
 			return res;
 		});
+		if (i > 0)
+			laser = 1;
+		if (i > 0)
+			acid = 1;
 	}
 	
 	public void initTransients(Environnement e) {
@@ -53,14 +61,34 @@ public class Niveau implements Serializable {
 		gameState = 1;
 	}
 
+	public void chooseAcid() {
+		if (acid > 0)
+			acidG = true;
+	}
+	
+	public void chooseLaser() {
+		if (laser > 0)
+			laserS = true;
+	}
+	
 	public void jouer(int a, int b) {
-		currentScore += currentPlat.supprimer(a, b, true);
+		if (acidG) {
+			currentScore += currentPlat.suppZone(a, b, 1);
+			acid--;
+			acidG = false;
+		} else if (laserS) {
+			currentScore += currentPlat.suppLigne(a);
+			laser--;
+			laserS = false;
+		} else {
+			currentScore += currentPlat.supprimer(a, b, true);
+		}
 		currentPlat.tomber();
-			int saved = currentPlat.suppAlien();
-			currentPlat.tomber();
-			currentScore += saved*1000;
-			currentPlat.glisser();
-			savedAlien += saved;
+		int saved = currentPlat.suppAlien();
+		currentPlat.tomber();
+		currentScore += saved*1000;
+		currentPlat.glisser();
+		savedAlien += saved;
 		gameState = stars.apply(currentScore, savedAlien);
 		if (gameState == 0 && !currentPlat.jouable())
 			gameState = -1;
