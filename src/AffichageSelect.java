@@ -22,6 +22,9 @@ public class AffichageSelect extends JPanel {
 	ArrayList<Bouton> niveaux = new ArrayList<>();
 	JButton play, home, save;
 	private Image bgImage = null;
+	ImageIcon la = new ImageIcon("images/LaunchPad.png");
+	ImageIcon ship = new ImageIcon("images/Ship.png");
+	ImageIcon shipland = new ImageIcon("images/ShipLand.png");
 	
 	public AffichageSelect (Environnement e) {
 		modele = e;
@@ -43,20 +46,22 @@ public class AffichageSelect extends JPanel {
 			int x =  240;
 			int y =  i * (900 / 6) - 130;
 			Bouton niv = new Bouton(i);
-			niv.setText(String.valueOf(i));
 			niv.setOpaque(false);
 			niv.setContentAreaFilled(false);
 			niv.setFont(new Font("Arial", Font.BOLD, 60));
 			niv.setBounds(x, y, 100, 100);
 			if ( i > e.maxNiv) {
 				niv.setEnabled(false);
-				niv.setBorderPainted(false);
+				niv.setIcon(la);
+				niv.setDisabledIcon(la);
+				
 			}
 			if (i == e.cursorNiv) {
 				niv.setEnabled(false);
 			}
-			if ( i <= e.maxNiv)
-				niv.setBorder(new LineBorder(Color.green, 3, true));;
+			if ( i <= e.maxNiv){niv.setIcon(la);
+            niv.setDisabledIcon(shipland);     
+			}
 			niv.addActionListener((event) -> changeNiv(niv.num));
 			niveaux.add(niv);
 			this.add(niv);
@@ -65,7 +70,7 @@ public class AffichageSelect extends JPanel {
 		play.setOpaque(false);
 		play.setContentAreaFilled(false);
 		play.setFont(new Font("Arial", Font.BOLD, 40));
-		play.setBounds(80, 800, 480, 50);
+		play.setBounds(80, 700, 480, 50);
 		play.setBorderPainted(false);
 		Image g = null;
 		if (g != null)
@@ -112,8 +117,8 @@ public class AffichageSelect extends JPanel {
 			if ( i <= modele.maxNiv && i != modele.cursorNiv)
 				this.niveaux.get(i - 1).setEnabled(true);
 			if ( i <= modele.maxNiv) {
-				this.niveaux.get(i - 1).setBorderPainted(true);
-				this.niveaux.get(i - 1).setBorder(BorderFactory.createLineBorder(Color.green));
+				
+				this.niveaux.get(i - 1).setDisabledIcon(shipland);
 			}
 		}
 		save.setIcon(new ImageIcon("images/save.png"));
