@@ -36,7 +36,7 @@ public class Ecran extends JFrame{
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 		envi = e;
 		Rectangle tailleEnvi = GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds();
-		if (HEIGHT > tailleEnvi.height)
+		if (height > tailleEnvi.height)
 			if (tailleEnvi.height >= 600) {
 				height = tailleEnvi.height;
 				width = tailleEnvi.height * 2 / 3;
@@ -47,7 +47,6 @@ public class Ecran extends JFrame{
 		this.setSize(width, height);
 		envi.setScreen(this);
 		menu();
-	
 	}
 
 

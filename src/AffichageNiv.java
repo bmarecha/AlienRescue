@@ -20,7 +20,7 @@ import javax.swing.SwingConstants;
 public class AffichageNiv extends JPanel {
 	private static final long serialVersionUID = 1L;
 	Niveau modele;
-	JLabel score, aliens, victory;
+	JLabel score, aliens, victory, anim;
 	JProgressBar goal;
 	JPanel affichagePlateau;
 	private Image bgImage = null;
@@ -40,31 +40,33 @@ public class AffichageNiv extends JPanel {
 		// Affichage des informations du niveau
 		JButton exit = new JButton(new ImageIcon("images/return.png"));
 		exit.addActionListener((event) -> modele.retour());
-		exit.setBounds(0, 0, 60, 60);
+		exit.setBounds(0, 0, 50, 60);
 		exit.setOpaque(false);
 		exit.setContentAreaFilled(false);
 		exit.setBorderPainted(false);
 		this.add(exit);
+		anim = new JLabel();
+		this.add(anim);
 		score = new JLabel("0", SwingConstants.RIGHT);
 		score.setFont(new Font("Arial", Font.BOLD, 30));
-		score.setBounds(60, 10, 100, 50);
+		score.setBounds(50, 10, 100, 50);
 		this.add(score);
+		aliens = new JLabel("0/" + modele.totalAlien, alien, SwingConstants.RIGHT);
+		aliens.setFont(new Font("Arial", Font.BOLD, 30));
+		aliens.setBounds(width-100, 10, 100, 60);
+		this.add(aliens);
 		goal = new JProgressBar(0, modele.totalAlien*10 + modele.totalCase);
 		goal.setOpaque(false);
-		goal.setBounds(170, 10, width/2, 50);
+		goal.setBounds(160, 10, width/2, 50);
 		labels = new JLabel[modele.starScore.length];
 		for (int i = 0; i < modele.starScore.length; i++) {
 			labels[i] = new JLabel(star1);
-			labels[i].setBounds(140 + (width/2 * modele.starScore[i]) / (goal.getMaximum() * 100 ), 10, 50, 50);
+			labels[i].setBounds(130 + (width/2 * modele.starScore[i]) / (goal.getMaximum() * 100 ), 10, 50, 50);
 			labels[i].setOpaque(false);
 			this.add(labels[i]);
 			System.out.println("add star : "+labels[i]+i);
 		}
 		this.add(goal);
-		aliens = new JLabel("0/" + modele.totalAlien, alien, SwingConstants.RIGHT);
-		aliens.setFont(new Font("Arial", Font.BOLD, 30));
-		aliens.setBounds(width-100, 10, 100, 60);
-		this.add(aliens);
 		victory = new JLabel();
 		victory.setFont(new Font("Arial", Font.BOLD, 40));
 		victory.setForeground(Color.WHITE);
@@ -192,6 +194,32 @@ public class AffichageNiv extends JPanel {
 	    else
 	    	System.out.println("no backgroundimage");
 	}
+	/*
+	public void animation(String directory, int x, int y) {
+		File f = new File("images/" + directory);
+		if (!f.exists() || !f.isDirectory())
+			return;
+		anim.setBounds(x, y, 200, 200);
+		int i = 1;
+		String path = "images/" + directory + "/" + directory + "1.png";
+		f = new File(path);
+		while (f.exists())
+		{
+			anim.setIcon(new ImageIcon(path));
+			try {
+				System.out.println(anim);
+				anim.updateUI();
+				Thread.sleep(10);
+				
+			} catch (InterruptedException e) {
+		        e.printStackTrace();
+			}
+			i++;
+			path = "images/" + directory + "/" + directory + Integer.toString(i)+ ".png";
+			f = new File(path);
+		}
+		anim.setIcon(null);
+	}*/
 	
 	private class Bouton extends JButton {
 		private static final long serialVersionUID = 1L;
