@@ -6,7 +6,8 @@ public class Launcher{
 		Environnement envi = null;
 		File save = new File("ser/Environ.ser");
 		if (args.length == 1)
-		{ 
+		{
+			
 			save = new File(args[0]);
 			if (!save.exists()) {
 				System.out.println("Le fichier entré en argument n'existe pas.");

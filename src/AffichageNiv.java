@@ -29,7 +29,7 @@ public class AffichageNiv extends JPanel {
 	ImageIcon aster2 = new ImageIcon("images/asteroid1.png");
 	ImageIcon aster1 = new ImageIcon("images/asteroid2.png");
 	ImageIcon aster3 = new ImageIcon("images/asteroid3.png");
-	ImageIcon alien = new ImageIcon("images/alien2.png");
+	ImageIcon alien = new ImageIcon("images/Ship.png");
 	LinkedList<JButton> powers = new LinkedList<>();
 	ImageIcon star1 = new ImageIcon("images/star1.png");
 	JLabel[] labels;
