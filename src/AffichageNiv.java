@@ -15,10 +15,12 @@ import java.util.HashMap;
 import java.util.Hashtable;
 
 import javax.imageio.ImageIO;
+import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 import javax.swing.JSlider;
@@ -134,11 +136,53 @@ public class AffichageNiv extends JPanel {
 		aliens.setText(modele.savedAlien + "/" + modele.totalAlien);
 		goal.setValue(modele.currentScore/100);
 		if (modele.gameState != 0) {
-			if (modele.gameState == -1)
+			
+			
+			if (modele.gameState == -1) {
 				victory.setText("Vous avez perdu !");
-			else
+				gagnePerd(false);
+			}else {
 				victory.setText("Vous avez gagné ! " + modele.gameState + "*");
+				gagnePerd(true);
+			}
 		}
+	}
+	public void gagnePerd(boolean b) {
+		String message;
+		String button2;
+		String quit= "Quiter";
+		Icon icon;
+		//buttons
+		if(b) {
+			button2="Prochain Niveau";
+			message = "Vous avez gagné!";
+			
+			
+		}else {
+			button2= "Rejouer";
+			message = "Vous avez perdu!";
+		
+		}
+		//afficher l'icon pour les étoiles
+		if(modele.gameState==1)
+			icon=
+		if(modele.gameState==2)
+		
+		if(modele.gameState==3)
+		
+		else
+		icon=null;
+		String[] buttons= {quit, button2};
+		int a= JOptionPane.showOptionDialog(null, message, "Resultat" ,JOptionPane.YES_NO_OPTION, JOptionPane.PLAIN_MESSAGE, icon ,buttons, button2);
+		//appuyer aux buttons
+		
+		if(a==1 ) {
+			modele.envi.chargerNiveau();
+		}else { 
+			modele.retour();
+		}
+
+		
 	}
 	
 	public void refreshPlat() {
