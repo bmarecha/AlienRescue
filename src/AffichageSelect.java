@@ -25,8 +25,10 @@ public class AffichageSelect extends JPanel {
 	private Image bgImage = null;
 
 	ImageIcon la = new ImageIcon("images/LaunchPad.png");
+	ImageIcon la2 = new ImageIcon("images/LaunchPad2.png");
 	ImageIcon ship = new ImageIcon("images/Ship.png");
 	ImageIcon shipland = new ImageIcon("images/ShipLand.png");
+	ImageIcon star1 = new ImageIcon("images/star1.png");
 
 	Clip clip;
   
@@ -66,13 +68,14 @@ public class AffichageSelect extends JPanel {
 			if ( i > e.maxNiv) {
 				niv.setEnabled(false);
 				niv.setIcon(la);
-				niv.setDisabledIcon(la);	
+				niv.setDisabledIcon(la2);	
 			}
 			if (i == e.cursorNiv) {
 				niv.setEnabled(false);
 			}
-			if ( i <= e.maxNiv){niv.setIcon(la);
-            niv.setDisabledIcon(shipland);     
+			if ( i <= e.maxNiv){
+				niv.setIcon(la);
+				niv.setDisabledIcon(shipland);     
 			}
 			niv.addActionListener((event) -> changeNiv(niv.num));
 			niveaux.add(niv);
@@ -170,7 +173,6 @@ public class AffichageSelect extends JPanel {
 			if ( i <= modele.maxNiv && i != modele.cursorNiv)
 				this.niveaux.get(i - 1).setEnabled(true);
 			if ( i <= modele.maxNiv) {
-				
 				this.niveaux.get(i - 1).setDisabledIcon(shipland);
 			}
 		}

@@ -11,12 +11,12 @@ public class Plateau implements Serializable, Cloneable{
 		largeur=l;
 		grid = new Case[hauteur][largeur];
 		String s=
-				"arrxxx" +
-				"rrbbrx" +
-				"vvbarr"+
-				"bbbvvv"+
-				"vvrrbb"+
-				"brvvrr";
+				"axxxxa" +
+				"bbbbvb" +
+				"bmbvvb"+
+				"bbbvvb"+
+				"bbbvvb"+
+				"rrrrrr";
 /*
 		s =		"xxxxxx" +
 				"xxaxxr" +
@@ -95,7 +95,7 @@ public class Plateau implements Serializable, Cloneable{
 		for(int i=this.hauteur - 1; i >= 0; i--) {
 			for(int j=0; j<=this.largeur-1; j++) {
 				grid[i][j].checked=false;
-				if(grid[i][j].k!=0 && i != this.hauteur-1) {
+				if(grid[i][j].k!=0 && grid[i][j].k != 5 && i != this.hauteur-1) {
 					int z;
 					for(z=i+1; z<this.hauteur; z++) {
 						if (grid[z][j].k != 0) {
@@ -154,9 +154,11 @@ public class Plateau implements Serializable, Cloneable{
 				while (++z < this.largeur)
 					if (grid[i][z].k != 0)
 						while (i > 0) {
-							int d = grid[i][z].k;
-							grid[i][z].k=grid[i][j].k;
-							grid[i][j].k=d;
+							int d = grid[i][j].k;
+							if (d == 0) {
+								grid[i][j].k=grid[i][z].k;
+								grid[i][z].k=d;
+							}
 							i--;
 						}
 			}

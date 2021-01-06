@@ -31,6 +31,7 @@ public class AffichageNiv extends JPanel {
 	ImageIcon aster2 = new ImageIcon("images/asteroid1.png");
 	ImageIcon aster1 = new ImageIcon("images/asteroid2.png");
 	ImageIcon aster3 = new ImageIcon("images/asteroid3.png");
+	ImageIcon aster4 = new ImageIcon("images/mine.png");
 	ImageIcon alien = new ImageIcon("images/Ship.png");
 	LinkedList<JButton> powers = new LinkedList<>();
 	ImageIcon star1 = new ImageIcon("images/star1.png");
@@ -54,10 +55,12 @@ public class AffichageNiv extends JPanel {
 		this.add(anim);
 		score = new JLabel("0", SwingConstants.RIGHT);
 		score.setFont(new Font("Arial", Font.BOLD, 30));
+		score.setForeground(Color.WHITE);
 		score.setBounds(50, 10, 100, 50);
 		this.add(score);
 		aliens = new JLabel("0/" + modele.totalAlien, alien, SwingConstants.RIGHT);
 		aliens.setFont(new Font("Arial", Font.BOLD, 30));
+		aliens.setForeground(Color.white);
 		aliens.setBounds(width-100, 10, 100, 60);
 		this.add(aliens);
 		goal = new JProgressBar(0, modele.totalAlien*10 + modele.totalCase);
@@ -126,7 +129,7 @@ public class AffichageNiv extends JPanel {
 		
 		//affichage des pouvoirs
 		if (n.acid > 0) {
-			JButton acid = new JButton("Arme Biochimique");
+			JButton acid = new JButton("Acide Explosif");
 			acid.addActionListener((event) -> choosePower(0));
 			powers.add(acid);
 		}if (n.laser > 0) {
@@ -137,7 +140,7 @@ public class AffichageNiv extends JPanel {
 		for (int i = 0; i < powers.size(); i++) {
 			JButton b = powers.get(i);
 			b.setBounds(40 + width * i / powers.size() ,height - 100, (width - 100 )/ powers.size(), 50);
-			b.setFont(new Font("Arial", Font.BOLD, 30));
+			b.setFont(new Font("Arial", Font.BOLD, 20));
 			b.setBackground(Color.GRAY);
 			b.setForeground(Color.white);
 			b.setEnabled(true);
@@ -199,9 +202,13 @@ public class AffichageNiv extends JPanel {
 		if(b) {
 			button2="Prochain Niveau";
 			message = "Vous avez gagné!";
+			if (modele.num == 2)
+				message += " Sur cette planète vous avez même trouvé de quoi vous faire une arme acide qui détruit tout dans un rayon de une case. Faites attention !";
+			else if (modele.num == 3)
+				message += " Sur cette planète vous avez même trouvé de quoi vous faire un laser qui détruit une ligne entière.";
 		}else {
 			button2= "Rejouer";
-			message = "Vous avez perdu!";
+			message = "Vous avez perdu! Vous ferez mieux la prochaine fois !";
 		}
 		//afficher l'icon pour les étoiles
 		if(modele.gameState==1)
@@ -252,7 +259,15 @@ public class AffichageNiv extends JPanel {
 				bouton.setIcon(alien);
 				bouton.setDisabledIcon(alien);
 				break;
-
+			case 5:
+				bouton.setEnabled(true);
+				bouton.setIcon(aster4);
+				break;
+			default:
+				bouton.setEnabled(false);
+				bouton.setIcon(null);
+				bouton.setDisabledIcon(null);
+				break;
 			}
 
 		}

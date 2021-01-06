@@ -88,6 +88,8 @@ public class Niveau implements Serializable {
 		currentPlat.tomber();
 		currentScore += saved*1000;
 		currentPlat.glisser();
+		currentPlat.tomber();
+		currentPlat.glisser();
 		savedAlien += saved;
 		gameState = stars.apply(currentScore, savedAlien);
 		if (gameState == 0 && !currentPlat.jouable())
