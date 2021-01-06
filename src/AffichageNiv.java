@@ -66,7 +66,6 @@ public class AffichageNiv extends JPanel {
 		aliens.setBounds(width-100, 10, 100, 60);
 		this.add(aliens);
 		goal = new JProgressBar(0, modele.totalAlien*10 + modele.totalCase);
-		System.out.println(goal.getMaximum());
 		goal.setOpaque(false);
 		goal.setBounds(160, 10, width/2, 50);
 		labels = new JLabel[modele.starScore.length];

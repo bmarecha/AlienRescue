@@ -183,7 +183,6 @@ public class Ecran extends JFrame{
 				j.setForeground(Color.white);
 				j.setBounds(30, 0, 150, height - 150);
 				scan.close();
-				System.out.println(j.getText());
 			} catch (FileNotFoundException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

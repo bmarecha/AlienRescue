@@ -34,7 +34,6 @@ public class Environnement implements Serializable{
 	//format des fichiers niveaux : NiveauX.niv avec X = son numéro, exemple : Niveau4.niv
 	public void chargerNiveau() {
 		File niveau = new File("ser/Niveau"+cursorNiv+".niv");
-		System.out.println("Chargement du niveau");
 		if (niveau.exists()) {
 			try { //chargement du fichier de niveau sauvegardé
 				ObjectInputStream ois = new ObjectInputStream(new FileInputStream(niveau));
