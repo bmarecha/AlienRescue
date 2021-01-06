@@ -32,6 +32,13 @@ public class Plateau implements Serializable, Cloneable{
 				"vbmvmr"+
 				"vbbvvr"+
 				"bvvvrr";
+		//Niveau 4
+		s =		"axxxxa" +
+				"brvbab" +
+				"mvmbvb"+
+				"rmrrmr"+
+				"bbbrvr"+
+				"vvvvrr";
 		for(int i=0; i<hauteur; i++) {
 			for(int j=0; j<largeur; j++) {
 				switch(s.charAt((i*6 + j)% s.length())){
@@ -127,9 +134,10 @@ public class Plateau implements Serializable, Cloneable{
 		int res = 0;
 		for (int i= -radius; i<=radius; i++) {
 			for (int j= -radius; j<=radius; j++) {
-			if(a+i>=0 && a+i<this.hauteur && b+j>=0 && b+j<this.largeur) {
+			if(a+i>=0 && a+i<this.hauteur && b+j>=0 && b+j<this.largeur && grid[a+i][b+j].k != 0) {
 				grid[a+i][b+j].supp();
-				res += 100;
+				if (grid[a+i][b+j].k != 4)
+					res += 100;
 			}
 			}
 		}

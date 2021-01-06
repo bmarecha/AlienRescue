@@ -81,13 +81,6 @@ public class Environnement implements Serializable{
 			return;
 		}
 	}
-
-	
-	public static void play(File f, boolean music) {
-		
-	}
-
-	
 	
 	// Le niveau a été quitté donc le score ou nombre de niveau disponibles ont peut être changer
 	public void niveauFini(boolean gagner, boolean stop, int etoiles) {

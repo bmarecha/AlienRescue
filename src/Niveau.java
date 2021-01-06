@@ -10,7 +10,7 @@ public class Niveau implements Serializable {
 	public final Plateau startPlateau;
 	public final int totalAlien;
 	public final int totalCase;
-	public final int[] starScore = {2500, 4500, 5200};
+	public final int[] starScore = {2500, 4700, 5900};
 	public int laser;
 	public int acid;
 	
@@ -98,7 +98,7 @@ public class Niveau implements Serializable {
 		currentScore += saved*1000;
 		savedAlien += saved;
 		gameState = stars.apply(currentScore, savedAlien);
-		if (gameState == 0 && !currentPlat.jouable())
+		if (gameState == 0 && (!currentPlat.jouable() || countAlien(currentPlat) == 0))
 			gameState = -1;
 	}
 	
@@ -106,7 +106,7 @@ public class Niveau implements Serializable {
 		int res = 0;
 		for (Case[] ligne : p.grid)
 			for (Case c : ligne)
-				if (c.isAlien)
+				if (c.k == 4)
 					res++;
 		return res;
 	}

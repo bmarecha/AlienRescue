@@ -220,22 +220,6 @@ public class AffichageSelect extends JPanel {
 		this.play.setText("Jouer au niveau " + cursor + " !");
 	}
 	
-	private BufferedImage loadImage(String src) {
-		BufferedImage img;
-		File f = new File(src);
-		if (!f.exists()) {
-			System.out.println("L'image n'existe pas.");
-			return null;
-		}
-		try {
-			img = ImageIO.read(f);
-		} catch (IOException e) {
-			e.printStackTrace();
-			return null;
-		}
-		return img;
-	}
-	
 	// Pour pouvoir numéroter les boutons (c'est utile vraiment)
 	private class Bouton extends JButton {
 		private static final long serialVersionUID = 1L;
