@@ -20,6 +20,7 @@ public class AffichageSelect extends JPanel {
 	private static final long serialVersionUID = 1L;
 	Environnement modele;
 	ArrayList<Bouton> niveaux = new ArrayList<>();
+	ArrayList<JLabel> Scores = new ArrayList<>();
 	JButton play, home, save, music;
 	boolean noSound= true;
 	private Image bgImage = null;
@@ -29,6 +30,8 @@ public class AffichageSelect extends JPanel {
 	ImageIcon ship = new ImageIcon("images/Ship.png");
 	ImageIcon shipland = new ImageIcon("images/ShipLand.png");
 	ImageIcon star1 = new ImageIcon("images/star1.png");
+	ImageIcon star2 = new ImageIcon("images/star2.png");
+	ImageIcon star3 = new ImageIcon("images/star3.png");
 
 	Clip clip;
   
@@ -57,14 +60,14 @@ public class AffichageSelect extends JPanel {
 		
 		for (int i = 1; i < 6; i++)
 		{
-			int x =  (width - 70) / 2;
+			int x =  (width - 60) / 2;
 			int y =  i * (height / 6) - 110;
 			Bouton niv = new Bouton(i);
 			niv.setOpaque(false);
 			niv.setContentAreaFilled(false);
 			niv.setBorderPainted(false);
 			niv.setFont(new Font("Arial", Font.BOLD, 50));
-			niv.setBounds(x, y, 70, 70);
+			niv.setBounds(x, y, 60, 60);
 			if ( i > e.maxNiv) {
 				niv.setEnabled(false);
 				niv.setIcon(la);
@@ -75,8 +78,10 @@ public class AffichageSelect extends JPanel {
 			}
 			if ( i <= e.maxNiv){
 				niv.setIcon(la);
-				niv.setDisabledIcon(shipland);     
+				niv.setDisabledIcon(shipland);
 			}
+			afficherEtoile(i - 1, x, y);
+			this.add(Scores.get(i - 1));
 			niv.addActionListener((event) -> changeNiv(niv.num));
 			niveaux.add(niv);
 			this.add(niv);
@@ -175,10 +180,40 @@ public class AffichageSelect extends JPanel {
 			if ( i <= modele.maxNiv) {
 				this.niveaux.get(i - 1).setDisabledIcon(shipland);
 			}
+			switch (modele.Scores[i - 1]) {
+			case 1 :
+				Scores.get(i - 1).setIcon(star1);
+				break;
+			case 2 :
+				Scores.get(i - 1).setIcon(star2);
+				break;
+			case 3 :
+				Scores.get(i - 1).setIcon(star3);
+				break;
+			}
 		}
 		play.setText("Jouer au niveau " + modele.cursorNiv + " !");
 		save.setIcon(new ImageIcon("images/save.png"));
 		save.setEnabled(true);
+		
+	}
+	
+	public void afficherEtoile(int n, int x, int y) {
+		JLabel etoiles = new JLabel();
+		switch (modele.Scores[n]) {
+		case 1 :
+			etoiles.setIcon(star1);
+			break;
+		case 2 :
+			etoiles.setIcon(star2);
+			break;
+		case 3 :
+			etoiles.setIcon(star3);
+			break;
+		}
+		etoiles.setOpaque(false);
+		etoiles.setBounds(x - 8, y + 23, 80, 80);
+		this.Scores.add(etoiles);
 	}
 
 	// Click sur un bouton de séléction

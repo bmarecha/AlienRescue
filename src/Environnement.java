@@ -33,7 +33,7 @@ public class Environnement implements Serializable{
 	
 	//format des fichiers niveaux : NiveauX.niv avec X = son numéro, exemple : Niveau4.niv
 	public void chargerNiveau() {
-		File niveau = new File("Niveau"+cursorNiv+".niv");
+		File niveau = new File("ser/Niveau"+cursorNiv+".niv");
 		System.out.println("Chargement du niveau");
 		if (niveau.exists()) {
 			try { //chargement du fichier de niveau sauvegardé
@@ -43,18 +43,29 @@ public class Environnement implements Serializable{
 				current.initTransients(this);
 				AffichageNiv panelNiv= new AffichageNiv(current);
 				this.screen.setContentPane(panelNiv);
+				this.screen.setVisible(true);
 			} catch (IOException e) {
 				e.printStackTrace();
 			} catch (ReflectiveOperationException e) {
 				e.printStackTrace();
 			}
-		} else { // Tant qu'on a pas de fichier sauvegardés pour les niveaux
-			System.out.println("Fichier pas encore créé. Chargement du niveau par défaut.");
+		} else {
+			// Tant qu'on a pas de fichier sauvegardés pour les niveaux
+			// Chargement du niveau par défaut.
 			current = new Niveau(cursorNiv);
 			current.initTransients(this);
 			AffichageNiv panelNiv= new AffichageNiv(current);
 			this.screen.setContentPane(panelNiv);
 			this.screen.setVisible(true);
+			// Enregistrement du niveau
+			ObjectOutputStream oos;
+			try {
+				oos = new ObjectOutputStream(new FileOutputStream(niveau));
+				oos.writeObject(current);
+				oos.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
 	}
 	
@@ -80,15 +91,21 @@ public class Environnement implements Serializable{
 	
 	// Le niveau a été quitté donc le score ou nombre de niveau disponibles ont peut être changer
 	public void niveauFini(boolean gagner, boolean stop, int etoiles) {
-		if (this.cursorNiv == maxNiv && gagner) {
-			maxNiv++;
+		if (gagner) {
+			if (Scores[this.cursorNiv - 1] < etoiles)
+				Scores[this.cursorNiv - 1] = etoiles;
+			if (this.cursorNiv == maxNiv)
+				maxNiv++;
+			if (!stop) {
+				cursorNiv++;
+				chargerNiveau();
+				return;
+			}
+
 		}
 		if (stop)
 			this.screen.select();
-		else if (gagner) {
-			cursorNiv++;
-			chargerNiveau();
-		} else
+		else
 			chargerNiveau();
 	}
 }

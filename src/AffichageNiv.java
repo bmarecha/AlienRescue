@@ -35,6 +35,8 @@ public class AffichageNiv extends JPanel {
 	ImageIcon alien = new ImageIcon("images/Ship.png");
 	LinkedList<JButton> powers = new LinkedList<>();
 	ImageIcon star1 = new ImageIcon("images/star1.png");
+	ImageIcon star2 = new ImageIcon("images/star2.png");
+	ImageIcon star3 = new ImageIcon("images/star3.png");
 	JLabel[] labels;
 
 	public AffichageNiv (Niveau n) {
@@ -214,9 +216,9 @@ public class AffichageNiv extends JPanel {
 		if(modele.gameState==1)
 			icon=star1;
 		else if(modele.gameState==2)
-			icon= star1;
+			icon= star2;
 		else if(modele.gameState==3)
-			icon = star1;
+			icon = star3;
 		else
 			icon=null;
 		String[] buttons= {quit, button2};

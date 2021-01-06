@@ -153,7 +153,13 @@ public class Plateau implements Serializable, Cloneable{
 				int z = j;
 				while (++z < this.largeur)
 					if (grid[i][z].k != 0)
-						while (i > 0) {
+						while (i > 0 && grid [i][z].k != 0 && grid [i][z].k != 5) {
+							int l;
+							for (l = z; l > j ;l--)
+								if (grid[i][l].k != 0) {
+									l++;
+									break;
+								}
 							int d = grid[i][j].k;
 							if (d == 0) {
 								grid[i][j].k=grid[i][z].k;

@@ -10,7 +10,6 @@ public class Niveau implements Serializable {
 	public final Plateau startPlateau;
 	public final int totalAlien;
 	public final int totalCase;
-	public final BiFunction<Integer, Integer, Integer> stars;
 	public final int[] starScore = {2000, 4000, 5000};
 	public int laser;
 	public int acid;
@@ -22,6 +21,7 @@ public class Niveau implements Serializable {
 	public transient int gameState;
 	public transient boolean laserS = false;
 	public transient boolean acidG = false;
+	public transient BiFunction<Integer, Integer, Integer> stars;
 	
 	// n'hésite pas à rajouter des choses au constructeur
 	public Niveau(int i) {
@@ -29,18 +29,6 @@ public class Niveau implements Serializable {
 		startPlateau = new Plateau(6, 6); 
 		totalAlien = countAlien(startPlateau);
 		totalCase = countCase(startPlateau);
-		stars = ((score, alien) -> {
-			int res = 0;
-			if (score >= starScore[0] && alien == totalAlien) {
-				res++;
-				if (score >= starScore[1]) {
-					res++;
-					if (score >= starScore[2])
-						res++;
-				}
-			}
-			return res;
-		});
 		if (i > 3)
 			laser = 1;
 		if (i > 2)
@@ -59,6 +47,18 @@ public class Niveau implements Serializable {
 		savedAlien = 0;
 		currentScore = 0;
 		gameState = 1;
+		stars = ((score, alien) -> {
+			int res = 0;
+			if (score >= starScore[0] && alien == totalAlien) {
+				res++;
+				if (score >= starScore[1]) {
+					res++;
+					if (score >= starScore[2])
+						res++;
+				}
+			}
+			return res;
+		});
 	}
 
 	public void chooseAcid() {
