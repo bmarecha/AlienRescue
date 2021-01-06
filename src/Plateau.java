@@ -10,28 +10,28 @@ public class Plateau implements Serializable, Cloneable{
 		hauteur=h;
 		largeur=l;
 		grid = new Case[hauteur][largeur];
+		//Niveau 1
 		String s=
-				"axxxxa" +
-				"bbbbvb" +
-				"bmbvvb"+
+				"bbaxxx" +
+				"bbbvvr" +
+				"rrvbrr"+
+				"vvvbbr"+
 				"bbbvvb"+
-				"bbbvvb"+
-				"rrrrrr";
-/*
-		s =		"xxxxxx" +
-				"xxaxxr" +
-				"bvrbvr"+
-				"vrbvrb"+
-				"bvrbvr"+
-				"vrbvrb";
-				*//*
+				"bbrvvv";
+		//Niveau 2
+		s =		"xxxxmx" +
+				"xxxxxx" +
+				"xvmxax"+
+				"rbxbrb"+
+				"bbvbvb"+
+				"rrrbvb";
+		//Niveau 3
 		s =		"arrrxx" +
-				"brbbxb" +
-				"vvbaxr"+
-				"rbbvrv"+
-				"vrrrbb"+
+				"brbbab" +
+				"vvbbrb"+
+				"vbmvmr"+
+				"vbbvvr"+
 				"bvvvrr";
-				//*/
 		for(int i=0; i<hauteur; i++) {
 			for(int j=0; j<largeur; j++) {
 				switch(s.charAt((i*6 + j)% s.length())){
@@ -152,21 +152,25 @@ public class Plateau implements Serializable, Cloneable{
 			if (grid[i][j].k == 0) {
 				int z = j;
 				while (++z < this.largeur)
-					if (grid[i][z].k != 0)
+					if (grid[i][z].k != 0) {
 						while (i > 0 && grid [i][z].k != 0 && grid [i][z].k != 5) {
-							int l;
-							for (l = z; l > j ;l--)
+							int l = z - 1;
+							while ( l > j) {
 								if (grid[i][l].k != 0) {
 									l++;
 									break;
 								}
-							int d = grid[i][j].k;
+								l--;
+							}
+							int d = grid[i][l].k;
 							if (d == 0) {
-								grid[i][j].k=grid[i][z].k;
+								grid[i][l].k=grid[i][z].k;
 								grid[i][z].k=d;
 							}
 							i--;
 						}
+						break;
+					}
 			}
 		}
 	}

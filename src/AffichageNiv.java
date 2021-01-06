@@ -74,7 +74,6 @@ public class AffichageNiv extends JPanel {
 			labels[i].setBounds(130 + (width/2 * modele.starScore[i]) / (goal.getMaximum() * 100 ), 10, 50, 50);
 			labels[i].setOpaque(false);
 			this.add(labels[i]);
-			System.out.println("add star : "+labels[i]+i);
 		}
 		this.add(goal);
 		victory = new JLabel();
@@ -101,7 +100,6 @@ public class AffichageNiv extends JPanel {
 		if (f.exists()) {
 			try {
 				bgImage = ImageIO.read(f);
-				System.out.println("Supposed to be painted...");
 			} catch (IOException except) {
 				except.printStackTrace();
 			}
@@ -147,7 +145,6 @@ public class AffichageNiv extends JPanel {
 			b.setForeground(Color.white);
 			b.setEnabled(true);
 			this.add(b);
-			System.out.println(b);
 		}
 		this.refreshPlat();
 	}

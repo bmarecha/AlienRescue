@@ -45,9 +45,6 @@ public class AffichageSelect extends JPanel {
 			try {
 				bgImage = ImageIO.read(f);
 				bgImage = new ImageIcon("images/Planets.jpg").getImage();
-				
-				
-				System.out.println("Supposed to be painted...");
 			} catch (IOException except) {
 				except.printStackTrace();
 			}
@@ -132,7 +129,6 @@ public class AffichageSelect extends JPanel {
 					clip.open(audioInput);
 					clip.start();
 					clip.loop(Clip.LOOP_CONTINUOUSLY);
-					System.out.print("MusicOn");
 					music.setIcon(new ImageIcon("images/musicOn.png"));
 					noSound = false;
 				}
