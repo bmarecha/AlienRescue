@@ -89,7 +89,6 @@ public class Ecran extends JFrame{
 				try {
 					bgImage = ImageIO.read(f);
 					//bgImage = new ImageIcon("images/ufo-600900.jpg").getImage();
-					System.out.println("Supposed to be painted...");
 				} catch (IOException except) {
 					except.printStackTrace();
 				}
@@ -156,7 +155,6 @@ public class Ecran extends JFrame{
 				try {
 					bgImage = ImageIO.read(f);
 					bgImage = new ImageIcon("images/ufo-600900.jpg").getImage();
-					System.out.println("Supposed to be painted...");
 				} catch (IOException except) {
 					except.printStackTrace();
 				}

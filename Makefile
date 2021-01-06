@@ -9,21 +9,20 @@ SRCS	=	src/Launcher.java \
 
 NAME = AlienRescue
 
-bin/Launcher.class	: ${SRCS}
-	javac ${SRCS}
-	mv src/*.class* bin/
+OBJS = ${SRCS:.java=.class}
 
-$(NAME)	: bin/Launcher.class
-	java -Dfile.encoding=UTF-8 -classpath ./bin Launcher
+$(OBJS)	: ${SRCS}
+	javac ${SRCS}
+
+$(NAME)	: ${OBJS}
+	java -Dfile.encoding=UTF-8 -classpath ./src Launcher
+	
 
 all		:	${NAME}
 
 clean	:
-	rm -f bin/*.class* 
+	rm -f src/*.class* 
 
-fclean	:	clean
-	rm -f ${NAME}
-
-re		: fclean all 
+re		: clean all 
 
 .PHONY	: all clean fclean re

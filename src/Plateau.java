@@ -5,13 +5,6 @@ public class Plateau implements Serializable, Cloneable{
 	Case[][] grid;
 	int hauteur;
 	int largeur;
-	/*
-	Case rouge = new Case(false, 1);
-	Case vert = new Case(false, 2);
-	Case bleu = new Case(false, 3);
-	Case vide= new Case(false,0);
-	Case[] normal= {rouge, vert, bleu};
-	*/
 
 	public Plateau (int h, int l) {
 		hauteur=h;
@@ -94,7 +87,6 @@ public class Plateau implements Serializable, Cloneable{
 		if(!first || neighbour) {
 			grid[a][b].k=0;
 			res+= 100;
-			System.out.println("supp " + a + " " + b + "n°" + res);
 		}
 		return res;
 	}
