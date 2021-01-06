@@ -10,7 +10,7 @@ public class Niveau implements Serializable {
 	public final Plateau startPlateau;
 	public final int totalAlien;
 	public final int totalCase;
-	public final int[] starScore = {2500, 4700, 5900};
+	public final int[] starScore = {4000, 6000, 7000};
 	public int laser;
 	public int acid;
 	
@@ -26,7 +26,7 @@ public class Niveau implements Serializable {
 	// n'hésite pas à rajouter des choses au constructeur
 	public Niveau(int i) {
 		num = i;
-		startPlateau = new Plateau(6, 6); 
+		startPlateau = new Plateau(7, 7); 
 		totalAlien = countAlien(startPlateau);
 		totalCase = countCase(startPlateau);
 		if (i > 3)

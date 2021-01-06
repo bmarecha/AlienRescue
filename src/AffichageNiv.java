@@ -154,16 +154,24 @@ public class AffichageNiv extends JPanel {
 		JButton activated = powers.get(p);
 		for (int i = 0; i < powers.size(); i++)
 			powers.get(i).setBackground(Color.GRAY);
-		activated.setBackground(Color.GREEN);
 		modele.acidG = false;
 		modele.laserS = false;
-		switch (p) {
-		case 0 :
-			modele.chooseAcid();
-		case 1 :
-			modele.chooseLaser();
-		}
-		
+		if (!activated.getBackground().equals(Color.GREEN)) {
+			activated.setBackground(Color.GREEN);
+			switch (p) {
+			case 0 :
+				modele.chooseAcid();
+				break;
+			case 1 :
+				modele.chooseLaser();
+				break;
+			}
+		} else
+			activated.setBackground(Color.GRAY);
+		if (modele.acid == 0 && powers.size() > 0)
+			powers.get(0).setBackground(Color.RED);
+		if (modele.laser == 0 && powers.size() > 1)
+			powers.get(1).setBackground(Color.RED);
 	}
 	
 	public void actualiser(){
@@ -192,6 +200,10 @@ public class AffichageNiv extends JPanel {
 				gagnePerd(true);
 			}
 		}
+		if (modele.acid == 0 && powers.size() > 0)
+			powers.get(0).setBackground(Color.RED);
+		if (modele.laser == 0 && powers.size() > 1)
+			powers.get(1).setBackground(Color.RED);
 	}
 	public void gagnePerd(boolean b) {
 		String message;
@@ -285,32 +297,6 @@ public class AffichageNiv extends JPanel {
 	    else
 	    	System.out.println("no backgroundimage");
 	}
-	/*
-	public void animation(String directory, int x, int y) {
-		File f = new File("images/" + directory);
-		if (!f.exists() || !f.isDirectory())
-			return;
-		anim.setBounds(x, y, 200, 200);
-		int i = 1;
-		String path = "images/" + directory + "/" + directory + "1.png";
-		f = new File(path);
-		while (f.exists())
-		{
-			anim.setIcon(new ImageIcon(path));
-			try {
-				System.out.println(anim);
-				anim.updateUI();
-				Thread.sleep(10);
-				
-			} catch (InterruptedException e) {
-		        e.printStackTrace();
-			}
-			i++;
-			path = "images/" + directory + "/" + directory + Integer.toString(i)+ ".png";
-			f = new File(path);
-		}
-		anim.setIcon(null);
-	}*/
 	
 	private class Bouton extends JButton {
 		private static final long serialVersionUID = 1L;

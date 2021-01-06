@@ -39,9 +39,17 @@ public class Plateau implements Serializable, Cloneable{
 				"rmrrmr"+
 				"bbbrvr"+
 				"vvvvrr";
+		//Niveau 5
+		s =		"axaxxxa" +
+				"bvbbxbb" +
+				"vrmbmbb"+
+				"rvbrxmb"+
+				"vvvrvvm"+
+				"vbvrvbv"+
+				"bbbvrrb";
 		for(int i=0; i<hauteur; i++) {
 			for(int j=0; j<largeur; j++) {
-				switch(s.charAt((i*6 + j)% s.length())){
+				switch(s.charAt((i*largeur + j)% s.length())){
 				case 'r':
 					grid[i][j]= new Case(false, 1) ;
 					break;
