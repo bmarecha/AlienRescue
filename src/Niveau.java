@@ -41,9 +41,9 @@ public class Niveau implements Serializable {
 			}
 			return res;
 		});
-		if (i > 0)
+		if (i > 3)
 			laser = 1;
-		if (i > 0)
+		if (i > 2)
 			acid = 1;
 	}
 	
@@ -116,7 +116,7 @@ public class Niveau implements Serializable {
 	// à l'environnement, n'hésite pas à mettre des arguments dans niveauFini si t'as besoin
 	// mais n'oublie pas non plus que les informations de niveau se trouvent dans l'environnement
 	// dans le Niveau current
-	public void retour() {
-		this.envi.niveauFini(savedAlien == totalAlien);
+	public void retour(boolean stop) {
+		this.envi.niveauFini(gameState > 0, stop, gameState);
 	}
 }

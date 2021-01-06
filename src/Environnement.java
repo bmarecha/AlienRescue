@@ -16,6 +16,7 @@ public class Environnement implements Serializable{
 	private static final long serialVersionUID = 3968155942580492870L;
 	public int maxNiv;
 	public int cursorNiv;
+	public int[] Scores = {0, 0, 0, 0, 0};
 	transient Niveau current;
 	transient Ecran screen;
 	//
@@ -78,9 +79,16 @@ public class Environnement implements Serializable{
 	
 	
 	// Le niveau a été quitté donc le score ou nombre de niveau disponibles ont peut être changer
-	public void niveauFini(boolean gagner) {
-		if (this.cursorNiv == maxNiv && gagner)
+	public void niveauFini(boolean gagner, boolean stop, int etoiles) {
+		if (this.cursorNiv == maxNiv && gagner) {
 			maxNiv++;
-		this.screen.select();
+		}
+		if (stop)
+			this.screen.select();
+		else if (gagner) {
+			cursorNiv++;
+			chargerNiveau();
+		} else
+			chargerNiveau();
 	}
 }

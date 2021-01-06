@@ -174,10 +174,11 @@ public class AffichageSelect extends JPanel {
 				this.niveaux.get(i - 1).setDisabledIcon(shipland);
 			}
 		}
+		play.setText("Jouer au niveau " + modele.cursorNiv + " !");
 		save.setIcon(new ImageIcon("images/save.png"));
 		save.setEnabled(true);
 	}
-	
+
 	// Click sur un bouton de séléction
 	private void changeNiv(int cursor) {
 		this.niveaux.get(modele.cursorNiv - 1).setEnabled(true);

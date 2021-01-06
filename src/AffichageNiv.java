@@ -44,7 +44,7 @@ public class AffichageNiv extends JPanel {
 
 		// Affichage des informations du niveau
 		JButton exit = new JButton(new ImageIcon("images/return.png"));
-		exit.addActionListener((event) -> modele.retour());
+		exit.addActionListener((event) -> modele.retour(true));
 		exit.setBounds(0, 0, 50, 60);
 		exit.setOpaque(false);
 		exit.setContentAreaFilled(false);
@@ -183,13 +183,9 @@ public class AffichageNiv extends JPanel {
 			bar = Color.RED;
 		goal.setForeground(bar);
 		if (modele.gameState != 0) {
-			
-			
 			if (modele.gameState == -1) {
-				victory.setText("Vous avez perdu !");
 				gagnePerd(false);
 			}else {
-				victory.setText("Vous avez gagné ! " + modele.gameState + "*");
 				gagnePerd(true);
 			}
 		}
@@ -203,30 +199,26 @@ public class AffichageNiv extends JPanel {
 		if(b) {
 			button2="Prochain Niveau";
 			message = "Vous avez gagné!";
-			
-			
 		}else {
 			button2= "Rejouer";
 			message = "Vous avez perdu!";
-		
 		}
 		//afficher l'icon pour les étoiles
 		if(modele.gameState==1)
-			icon=
-		if(modele.gameState==2)
-		
-		if(modele.gameState==3)
-		
+			icon=star1;
+		else if(modele.gameState==2)
+			icon= star1;
+		else if(modele.gameState==3)
+			icon = star1;
 		else
-		icon=null;
+			icon=null;
 		String[] buttons= {quit, button2};
 		int a= JOptionPane.showOptionDialog(null, message, "Resultat" ,JOptionPane.YES_NO_OPTION, JOptionPane.PLAIN_MESSAGE, icon ,buttons, button2);
 		//appuyer aux buttons
-		
 		if(a==1 ) {
-			modele.envi.chargerNiveau();
+			modele.retour(false);
 		}else { 
-			modele.retour();
+			modele.retour(true);
 		}
 
 		
